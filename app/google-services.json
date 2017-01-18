@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "342760999217",
+    "project_id": "incident-2017"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342760999217:android:7dc22cd308ec55c6",
+        "android_client_info": {
+          "package_name": "in.co.inci17"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342760999217-4k83o7btu3qlqu3kkkcr7s3ii4h2v5h9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.co.inci17",
+            "certificate_hash": "6F2A8531D1CAB713AA9AE26BD344AEBB29A6E353"
+          }
+        },
+        {
+          "client_id": "342760999217-4imo8ls9eu9m6iks5h5rgjnsr7h8djgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPKkpy8NnWH_dAoXFEXPL_Z5NcmKZ7Nc4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
