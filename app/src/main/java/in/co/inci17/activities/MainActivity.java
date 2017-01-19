@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import in.co.inci17.R;
+import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,15 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLayout() {
         TextView tvName, tvEmail;
-        ImageView ivProfilePic;
+        ImageView ivProfilePic, ivQRCode;
 
         tvName = (TextView) findViewById(R.id.tv_name);
         tvEmail = (TextView) findViewById(R.id.tv_email);
         ivProfilePic = (ImageView) findViewById(R.id.iv_profile_pic);
+        ivQRCode = (ImageView) findViewById(R.id.iv_qr_code);
 
         tvName.setText(user.getDisplayName());
         tvEmail.setText(user.getEmail());
         Picasso.with(this).load(user.getImageUrl()).into(ivProfilePic);
+
+        ivQRCode.setImageBitmap(Helper.getQRCode(user.getDisplayName()));
     }
 
     private void sendUserToLoginScreen() {
