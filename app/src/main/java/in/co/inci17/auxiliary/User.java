@@ -14,9 +14,18 @@ public class User {
     private static final String USER_KEY = "user";
     private static User user;
 
+    private String id;
     private String displayName;
     private String email;
     private String imageUrl;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDisplayName() {
         return displayName;

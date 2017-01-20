@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
         if ((user = User.getCurrentUser(this)) == null)
             sendUserToLoginScreen();
-
-        updateLayout();
+        else
+            updateLayout();
     }
 
     private void updateLayout() {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         tvEmail.setText(user.getEmail());
         Picasso.with(this).load(user.getImageUrl()).into(ivProfilePic);
 
-        ivQRCode.setImageBitmap(Helper.getQRCode(user.getDisplayName()));
+        ivQRCode.setImageBitmap(Helper.getQRCode(user.getId()));
     }
 
     private void sendUserToLoginScreen() {

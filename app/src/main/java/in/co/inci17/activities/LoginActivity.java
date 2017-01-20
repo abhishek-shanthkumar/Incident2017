@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -27,13 +32,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import in.co.inci17.R;
 import in.co.inci17.auxiliary.Constants;
+import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.User;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 812;
+    private final String TAG = "MainActivity";
+    private RequestQueue mRequestQueue;
     private GoogleApiClient mGoogleApiClient;
     private LoginButton facebookSigninButton;
     private CallbackManager callbackManager;
@@ -43,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+        mRequestQueue = Volley.newRequestQueue(this);
         prepareGoogleSignin();
         prepareFacebookSignin();
         findViewById(R.id.google_signin_button).setOnClickListener(this);
@@ -77,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        authenticateUserWithServer(object);
+                        createUser(object);
                     }
                 });
         Bundle parameters = new Bundle();
@@ -124,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            authenticateUserWIthServer(acct);
+            createUser(acct);
         } else {
             // Signed out, show unauthenticated UI.
             handleSigninError();
@@ -132,41 +143,77 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void handleSigninError() {
-        Toast.makeText(this, Constants.MESSAGE_NETWORK_ERROR, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, Constants.Messages.MESSAGE_NETWORK_ERROR, Toast.LENGTH_SHORT).show();
     }
 
-    private void authenticateUserWithServer(JSONObject object) {
-        //TODO Send details to server
-        Log.d("Facebook Signin", "Authenticating with server");
+    private void createUser(JSONObject object) {
         Profile profile = Profile.getCurrentProfile();
-
         User user = new User();
         user.setDisplayName(profile.getName());
         try {
             user.setEmail(object.getString("email"));
             user.setImageUrl(profile.getProfilePictureUri(500, 500).toString());
-            User.updateUser(user, this);
-
-            Toast.makeText(this, Constants.MESSAGE_FACEBOOK_SIGNIN_SUCCESS+"\nWelcome, "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            this.finish();
+            Toast.makeText(this, Constants.Messages.MESSAGE_FACEBOOK_SIGNIN_SUCCESS+"\nWelcome, "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            authenticateUserWithServer(user);
         } catch (JSONException e) {
             handleSigninError();
         }
     }
 
-    private void authenticateUserWIthServer(GoogleSignInAccount account) {
-        Toast.makeText(this, Constants.MESSAGE_GOOGLE_SIGNIN_SUCCESS+"\nWelcome, "+account.getDisplayName(), Toast.LENGTH_SHORT).show();
-
-        //TODO Send details to server
-
+    private void createUser(GoogleSignInAccount account) {
+        Toast.makeText(this, Constants.Messages.MESSAGE_GOOGLE_SIGNIN_SUCCESS+"\nWelcome, "+account.getDisplayName(), Toast.LENGTH_SHORT).show();
         User user = new User();
         user.setDisplayName(account.getDisplayName());
         user.setEmail(account.getEmail());
         //noinspection ConstantConditions
         user.setImageUrl(account.getPhotoUrl().toString());
+        authenticateUserWithServer(user);
+    }
+
+    private void authenticateUserWithServer(final User user) {
+        String url = Constants.URLs.CHECK_EMAIL;
+        final HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.Keys.EMAIL, user.getEmail());
+
+        CustomRequest mRequest = new CustomRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String present, accountID, error;
+                        try {
+                            present = response.getString(Constants.Keys.PRESENT);
+                            accountID = response.getString(Constants.Keys.ACCOUNT_ID);
+                            error = response.getString(Constants.Keys.ERROR);
+                            if(!error.isEmpty())
+                                handleSigninError(error);
+                            else {
+                                if (present.equals("1"))
+                                    userAlreadyRegistered(user, accountID);
+                                else
+                                    registerUser(user);
+                            }
+                        } catch (JSONException e) {
+                            Log.e("JSONError", e.getLocalizedMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", error.getLocalizedMessage());
+                        handleSigninError();
+                    }
+                });
+        mRequest.setTag(TAG);
+        mRequestQueue.add(mRequest);
+    }
+
+    private void handleSigninError(String error) {
+        Toast.makeText(this, "Server error: "+error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void userAlreadyRegistered(User user, String accountID) {
+        user.setId(accountID);
         User.updateUser(user, this);
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -174,8 +221,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.finish();
     }
 
+    private void registerUser(User user) {
+        Toast.makeText(this, "Need additional info!", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         handleSigninError();
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        if (mRequestQueue != null) {
+            mRequestQueue.cancelAll(TAG);
+        }
     }
 }
