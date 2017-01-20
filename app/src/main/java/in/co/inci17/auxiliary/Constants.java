@@ -9,15 +9,17 @@ public class Constants {
     public static final String PASSPHRASE = "8d71b02e54993ac4ee2351c9804552549f1bade7";
 
     public static class Messages {
-        public static final String MESSAGE_NETWORK_ERROR = "Connection problem. Please try later.";
-        public static final String MESSAGE_GOOGLE_SIGNIN_SUCCESS = "Google Signin Successful!";
-        public static final String MESSAGE_FACEBOOK_SIGNIN_SUCCESS = "Facebook Signin Successful!";
+        public static final String NETWORK_ERROR = "Connection problem. Please try later.";
+        public static final String GOOGLE_SIGNIN_SUCCESS = "Google Signin Successful!";
+        public static final String FACEBOOK_SIGNIN_SUCCESS = "Facebook Signin Successful!";
+        public static final String EMAIL_NEEDED = "We need your email address! Please sign in again";
     }
 
     public static class URLs {
-        private static final String HOST = "http://10.50.47.143/api/";
+        private static final String HOST = "http://incident.co.in/api/";
 
-        public static final String CHECK_EMAIL = HOST+"is-user-present.php";
+        public static final String USER_PRESENT = HOST+"is-user-present.php";
+        public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
     }
 
     public static class Keys {

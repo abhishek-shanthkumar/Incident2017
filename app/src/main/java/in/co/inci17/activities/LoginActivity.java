@@ -20,6 +20,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -88,7 +89,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        createUser(object);
+                        if(object.has(Constants.Keys.EMAIL))
+                            createUser(object);
+                        else {
+                            Toast.makeText(LoginActivity.this, Constants.Messages.EMAIL_NEEDED, Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
+                        }
                     }
                 });
         Bundle parameters = new Bundle();
@@ -135,6 +141,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+            String email = acct.getEmail();
+            if(email==null || email.isEmpty()) {
+                Toast.makeText(this, Constants.Messages.EMAIL_NEEDED, Toast.LENGTH_SHORT).show();
+                Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient);
+                return;
+            }
             createUser(acct);
         } else {
             // Signed out, show unauthenticated UI.
@@ -143,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void handleSigninError() {
-        Toast.makeText(this, Constants.Messages.MESSAGE_NETWORK_ERROR, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, Constants.Messages.NETWORK_ERROR, Toast.LENGTH_SHORT).show();
     }
 
     private void createUser(JSONObject object) {
@@ -153,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             user.setEmail(object.getString("email"));
             user.setImageUrl(profile.getProfilePictureUri(500, 500).toString());
-            Toast.makeText(this, Constants.Messages.MESSAGE_FACEBOOK_SIGNIN_SUCCESS+"\nWelcome, "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, Constants.Messages.FACEBOOK_SIGNIN_SUCCESS +"\nWelcome, "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
             authenticateUserWithServer(user);
         } catch (JSONException e) {
             handleSigninError();
@@ -161,7 +173,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void createUser(GoogleSignInAccount account) {
-        Toast.makeText(this, Constants.Messages.MESSAGE_GOOGLE_SIGNIN_SUCCESS+"\nWelcome, "+account.getDisplayName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, Constants.Messages.GOOGLE_SIGNIN_SUCCESS +"\nWelcome, "+account.getDisplayName(), Toast.LENGTH_SHORT).show();
         User user = new User();
         user.setDisplayName(account.getDisplayName());
         user.setEmail(account.getEmail());
@@ -171,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void authenticateUserWithServer(final User user) {
-        String url = Constants.URLs.CHECK_EMAIL;
+        String url = Constants.URLs.USER_PRESENT;
         final HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.EMAIL, user.getEmail());
 
@@ -223,6 +235,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void registerUser(User user) {
         Toast.makeText(this, "Need additional info!", Toast.LENGTH_SHORT).show();
+
+        //TODO Show view where user can enter other details and send the details to server
     }
 
     @Override
