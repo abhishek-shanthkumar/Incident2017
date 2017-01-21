@@ -8,10 +8,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import butterknife.BindView;
+import com.android.volley.Response;
+
+import java.util.List;
+
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventListAdapter;
 import in.co.inci17.adapters.ViewPagerAdapterLeaderboard;
+import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,17 +27,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ViewPager leaderboardPager;
     CharSequence Titles[] = {"Leaderboard_1", "Leaderboard_2"};
 
+    private List<Event> events;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //RecyclerView set-up
-        rvEvents = (RecyclerView)findViewById(R.id.rv_events);
-        mEventListAdapter = new EventListAdapter(getApplicationContext());
-        rvEvents.setLayoutManager(new LinearLayoutManager(this));
-        rvEvents.setItemAnimator(new DefaultItemAnimator());
-        rvEvents.setAdapter(mEventListAdapter);
+        EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
+            @Override
+            public void onResponse(List<Event> response) {
+                events = response;
+                setupRecyclerView();
+            }
+        });
 
         //Viewpager set-up
         leaderboardPager = (ViewPager) findViewById(R.id.pager_leaderboard);
@@ -40,6 +48,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         leaderboardPager.setAdapter(mViewPagerAdapterLeaderboard);
         leaderboardPager.setCurrentItem(0);
 
+    }
+
+    private void setupRecyclerView() {
+        //RecyclerView set-up
+        rvEvents = (RecyclerView)findViewById(R.id.rv_events);
+        mEventListAdapter = new EventListAdapter(getApplicationContext(), events);
+        rvEvents.setLayoutManager(new LinearLayoutManager(this));
+        rvEvents.setItemAnimator(new DefaultItemAnimator());
+        rvEvents.setAdapter(mEventListAdapter);
     }
 
     @Override

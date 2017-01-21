@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import in.co.inci17.R;
+import in.co.inci17.auxiliary.Event;
 
 /**
  * Created by RK on 03/11/2016.
@@ -18,18 +21,20 @@ import in.co.inci17.R;
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventListViewHolder> {
 
     Context context;
+    private List<Event> events;
 
     public static final int HEADER = 0;
     public static final int LIVE = 1;
     public static final int UPCOMING = 2;
 
-    public EventListAdapter(Context context) {
+    public EventListAdapter(Context context, List<Event> events) {
         this.context = context;
+        this.events = events;
     }
 
     @Override
     public int getItemCount() {
-        return 12;
+        return events.size();
     }
 
     @Override
@@ -53,6 +58,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
         else {
             UpcomingViewHolder mUpcomingViewHolder = (UpcomingViewHolder) EventListViewHolder;
+            Event event = events.get(i);
+            mUpcomingViewHolder.eventName.setText(event.getTitle());
+            mUpcomingViewHolder.eventDescription.setText(event.getDescription());
         }
 
     }
@@ -117,11 +125,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public class UpcomingViewHolder extends EventListViewHolder {
 
         CardView cardType;
-        TextView elementTitle;
+        TextView eventName;
+        TextView eventDescription;
 
         public UpcomingViewHolder(View v) {
             super(v);
-
+            eventName = (TextView) v.findViewById(R.id.tv_event_name);
+            eventDescription = (TextView) v.findViewById(R.id.tv_event_description);
         }
     }
 }
