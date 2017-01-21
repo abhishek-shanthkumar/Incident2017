@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="ColorWhite">#FFFFFF</color>
+    <color name="ColorWhiteTransparent">#8cffffff</color>
+
+   <!--App related-->
+    <color name="ColorPrimary">#F7971d</color>
+    <color name="ColorPrimaryDark">#F58B00</color>
+
+    <!--RecyclerView-->
+    <color name="ColorRecyclerBackground">#DFDFDF</color>
+
+    <!--Text-->
+    <color name="ColorTextHeading">#FFFFFF</color>
+    <color name="ColorTextInfo">#000000</color>
+
+    <!--Tabs-->
+    <color name="ColorTabTextSelected">#FFFFFF</color>
+    <color name="ColorTabText">#AFFFFFFF</color>
+
+    <!--Key Stats/Divider-->
+    <color name="ColorKeyStatContainer">#BCBCBC</color>
+    <color name="blue_grey_500">#607D8B</color>
+<color name="blue_grey_600">#546E7A</color>
+<color name="blue_grey_700">#455A64</color>
+<color name="blue_grey_800">#37474F</color>
+<color name="blue_grey_900">#263238</color>
+ <color name="colorPrimary">#039BE5</color>
+ <color name="colorPrimaryDark">#0288D1</color>
+ <color name="colorAccent">#FFA000</color>
+
+ <color name="grey_100">#F5F5F5</color>
+ <color name="grey_300">#E0E0E0</color>
+</resources>
+

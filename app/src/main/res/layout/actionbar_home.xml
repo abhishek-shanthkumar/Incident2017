@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_acb_home"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_gravity="right"
+    android:background="@color/ColorPrimary"
+    android:elevation="4dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/ib_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_menu_24" />
+
+        <LinearLayout
+            android:id="@+id/container_close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/ib_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/ic_close_24_white"
+                android:visibility="gone" />
+        </LinearLayout>
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_vertical_margin">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="Home"
+                android:textColor="@color/ColorTextHeading"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tv_title_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="Notifications"
+                android:textColor="@color/ColorTextHeading"
+                android:textSize="22sp"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/ib_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|right"
+            android:layout_toLeftOf="@+id/ib_notification"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/activity_vertical_margin"
+            android:src="@mipmap/ic_search_24" />
+
+        <ImageButton
+            android:id="@+id/ib_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_notifications_none_24" />
+    </RelativeLayout>
+
+</LinearLayout>
