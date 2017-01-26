@@ -11,6 +11,9 @@
     <!--RecyclerView-->
     <color name="ColorRecyclerBackground">#DFDFDF</color>
 
+    <!--Divider color-->
+    <color name="ColorDivider">#C2C2C2</color>
+
     <!--Text-->
     <color name="ColorTextHeading">#FFFFFF</color>
     <color name="ColorTextInfo">#000000</color>
