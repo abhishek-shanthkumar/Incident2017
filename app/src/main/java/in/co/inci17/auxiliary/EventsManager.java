@@ -6,7 +6,6 @@ package in.co.inci17.auxiliary;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -59,7 +58,7 @@ public class EventsManager {
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.ACCOUNT_ID, user.getId());
 
-        CustomRequest request = new CustomRequest(Request.Method.POST, Constants.URLs.GET_ALL_EVENTS, params,
+        CustomRequest request = new CustomRequest(Constants.URLs.GET_ALL_EVENTS, params,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray array) {

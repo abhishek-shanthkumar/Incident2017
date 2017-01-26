@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -192,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.EMAIL, user.getEmail());
 
-        CustomRequest mRequest = new CustomRequest(Request.Method.POST, url, params,
+        CustomRequest mRequest = new CustomRequest(url, params,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray responseArray) {

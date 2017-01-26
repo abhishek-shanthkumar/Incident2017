@@ -13,6 +13,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "342760999217-9aoubgemkh7nr7hcfqf87ctvf4klegfl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.co.inci17",
+            "certificate_hash": "5879796493798AF7F5BC9BB3C6F3FD37575FCA69"
+          }
+        },
+        {
           "client_id": "342760999217-ap9cc322qgas1aai6pb5b9fhpr7e8f1i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

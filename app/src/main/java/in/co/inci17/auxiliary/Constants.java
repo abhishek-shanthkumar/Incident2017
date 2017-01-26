@@ -7,6 +7,7 @@ public class Constants {
 
     public static final String SHARED_PREFS_FILE = "InciSharedPrefs";
     public static final String PASSPHRASE = "8d71b02e54993ac4ee2351c9804552549f1bade7";
+    public static final String EVENT_STRING = "event_string";
 
     public static class Messages {
         public static final String NETWORK_ERROR = "Connection problem. Please try later.";
@@ -21,6 +22,7 @@ public class Constants {
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
         public static final String GET_ALL_EVENTS = HOST+"get-event-details.php";
+        public static final String REGISTER_EVENT = HOST+"register-event-accommodation.php";
     }
 
     public static class Keys {
@@ -35,5 +37,7 @@ public class Constants {
         public static final String EVENT_SUBTITLE = "subtitle";
         public static final String EVENT_DESCRIPTION = "description";
         public static final String EVENT_HAS_REGISTERED = "has_registered";
+        public static final String EVENT_PARTICIPANTS = "participants";
+        public static final String OUTPUT = "output";
     }
 }
