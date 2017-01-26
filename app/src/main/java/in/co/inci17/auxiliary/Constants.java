@@ -20,6 +20,7 @@ public class Constants {
 
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
+        public static final String GET_ALL_EVENTS = HOST+"get-event-details.php";
     }
 
     public static class Keys {
@@ -28,5 +29,11 @@ public class Constants {
         public static final String PRESENT = "present";
         public static final String ACCOUNT_ID = "account_id";
         public static final String ERROR = "error";
+        public static final String EVENT_ID = "id";
+        public static final String EVENT_TITLE = "title";
+        public static final String EVENT_CATEGORY = "category";
+        public static final String EVENT_SUBTITLE = "subtitle";
+        public static final String EVENT_DESCRIPTION = "description";
+        public static final String EVENT_HAS_REGISTERED = "has_registered";
     }
 }

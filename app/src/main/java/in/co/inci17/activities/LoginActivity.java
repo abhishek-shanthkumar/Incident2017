@@ -28,16 +28,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import com.google.android.gms.common.SignInButton;
-
-import butterknife.BindView;
 import in.co.inci17.R;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
@@ -194,11 +193,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         params.put(Constants.Keys.EMAIL, user.getEmail());
 
         CustomRequest mRequest = new CustomRequest(Request.Method.POST, url, params,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray responseArray) {
                         String present, accountID, error;
                         try {
+                            JSONObject response = responseArray.getJSONObject(0);
                             present = response.getString(Constants.Keys.PRESENT);
                             accountID = response.getString(Constants.Keys.ACCOUNT_ID);
                             error = response.getString(Constants.Keys.ERROR);

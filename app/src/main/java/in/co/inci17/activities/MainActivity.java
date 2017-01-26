@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
             sendUserToLoginScreen();
         else
             updateLayout();
+
+        startActivity(new Intent(this, HomeActivity.class));
+        //finish();
     }
 
     private void updateLayout() {
