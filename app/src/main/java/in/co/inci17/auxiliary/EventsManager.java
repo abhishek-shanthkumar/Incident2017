@@ -29,13 +29,19 @@ public class EventsManager {
     public synchronized static void getAllEvents(Context context, Response.Listener<List<Event>> listener) {
         if(user == null)
             user = User.getCurrentUser(context);
-        if(events != null)
+        /*if(events != null)
             listener.onResponse(events);
         else {
             if(listeners == null)
                 listeners = new ArrayList<>();
             listeners.add(listener);
         }
+        */
+
+        if(listeners == null)
+            listeners = new ArrayList<>();
+        listeners.add(listener);
+
         if(!fetchingEvents)
             fetchEvents(context);
     }

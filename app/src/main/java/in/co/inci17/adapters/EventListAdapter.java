@@ -77,11 +77,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             }
                             else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
-                                event.setHasRegistered(false);
+                                //event.setHasRegistered(false);
                             }
                         } catch (JSONException e) {
                             Log.e("JSONResponse", e.getLocalizedMessage());
-                            event.setHasRegistered(false);
+                            //event.setHasRegistered(false);
                         }
                         notifyItemChanged(eventIndex);
                     }
@@ -91,8 +91,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, Constants.Messages.NETWORK_ERROR+"\n"+error, Toast.LENGTH_SHORT).show();
                         //Log.e("Volley", error.networkResponse.toString());
-                        event.setHasRegistered(false);
-                        notifyItemChanged(eventIndex);
+                        //event.setHasRegistered(false);
+                        //notifyItemChanged(eventIndex);
                     }
                 });
         mRequestQueue.add(request);

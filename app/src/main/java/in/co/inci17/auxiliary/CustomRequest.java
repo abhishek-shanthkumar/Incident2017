@@ -46,7 +46,7 @@ public class CustomRequest extends Request<JSONArray> {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             if(jsonString.charAt(0)!='[')
                 jsonString = "["+jsonString+"]";
-            return Response.success(new JSONArray(jsonString), parseIgnoreCacheHeaders(response));
+            return Response.success(new JSONArray(jsonString), parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         } catch (JSONException je) {
@@ -65,11 +65,12 @@ public class CustomRequest extends Request<JSONArray> {
      * @param response The network response to parse headers from
      * @return a cache entry for the given response, or null if the response is not cacheable.
      */
-    protected Cache.Entry parseCacheHeaders(NetworkResponse response) {
-        if(shouldCache)
+    private Cache.Entry parseCacheHeaders(NetworkResponse response) {
+        if (shouldCache) {
             return parseIgnoreCacheHeaders(response);
-        else
+        } else {
             return HttpHeaderParser.parseCacheHeaders(response);
+        }
     }
 
     private static Cache.Entry parseIgnoreCacheHeaders(NetworkResponse response) {
