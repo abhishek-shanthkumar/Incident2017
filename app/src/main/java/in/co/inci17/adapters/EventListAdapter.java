@@ -65,7 +65,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         params.put(Constants.Keys.ACCOUNT_ID, user.getId());
         params.put(Constants.Keys.EVENT_ID, event.getId());
         params.put(Constants.Keys.EVENT_PARTICIPANTS, user.getId());
-        final CustomRequest request = new CustomRequest(url, params,
+        CustomRequest request = new CustomRequest(url, params,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -74,13 +74,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             String output = object.getString(Constants.Keys.OUTPUT);
                             if(output.equals("1")) {
                                 event.setHasRegistered(true);
-                                notifyItemChanged(eventIndex);
                             }
-                            else
+                            else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
+                                event.setHasRegistered(false);
+                            }
                         } catch (JSONException e) {
                             Log.e("JSONResponse", e.getLocalizedMessage());
+                            event.setHasRegistered(false);
                         }
+                        notifyItemChanged(eventIndex);
                     }
                 },
                 new Response.ErrorListener() {
@@ -88,6 +91,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, Constants.Messages.NETWORK_ERROR+"\n"+error, Toast.LENGTH_SHORT).show();
                         //Log.e("Volley", error.networkResponse.toString());
+                        event.setHasRegistered(false);
+                        notifyItemChanged(eventIndex);
                     }
                 });
         mRequestQueue.add(request);

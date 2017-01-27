@@ -21,12 +21,18 @@ public class CustomRequest extends Request<JSONArray> {
 
     private Response.Listener<JSONArray> listener;
     private HashMap<String, String> params;
+    private boolean shouldCache = false;
 
-    public CustomRequest(String url, HashMap<String, String> params, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+    public CustomRequest(String url, HashMap<String, String> params, boolean shouldCache, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         super(Method.POST, url, errorListener);
         this.listener = listener;
         this.params = params;
         this.params.put(Constants.Keys.HASH, Constants.PASSPHRASE);
+        this.shouldCache = shouldCache;
+    }
+
+    public CustomRequest(String url, HashMap<String, String> params, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        this(url, params, false, listener, errorListener);
     }
 
     @Override
@@ -59,7 +65,14 @@ public class CustomRequest extends Request<JSONArray> {
      * @param response The network response to parse headers from
      * @return a cache entry for the given response, or null if the response is not cacheable.
      */
-    public static Cache.Entry parseIgnoreCacheHeaders(NetworkResponse response) {
+    protected Cache.Entry parseCacheHeaders(NetworkResponse response) {
+        if(shouldCache)
+            return parseIgnoreCacheHeaders(response);
+        else
+            return HttpHeaderParser.parseCacheHeaders(response);
+    }
+
+    private static Cache.Entry parseIgnoreCacheHeaders(NetworkResponse response) {
         long now = System.currentTimeMillis();
 
         Map<String, String> headers = response.headers;
@@ -74,7 +87,7 @@ public class CustomRequest extends Request<JSONArray> {
 
         serverEtag = headers.get("ETag");
 
-        final long cacheHitButRefreshed = 0 * 60 * 1000; // in 1 minute cache will be hit, but also refreshed on background
+        final long cacheHitButRefreshed = 0 * 60 * 1000; // in 3 minutes cache will be hit, but also refreshed on background
         final long cacheExpired = 24 * 60 * 60 * 1000; // in 24 hours this cache entry expires completely
         final long softExpire = now + cacheHitButRefreshed;
         final long ttl = now + cacheExpired;
