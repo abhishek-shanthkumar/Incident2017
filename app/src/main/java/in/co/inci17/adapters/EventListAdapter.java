@@ -1,13 +1,25 @@
 package in.co.inci17.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -52,17 +64,28 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         if (EventListViewHolder.getItemViewType() == HEADER) {
             HeaderViewHolder mHeaderViewHolder = (HeaderViewHolder) EventListViewHolder;
-        }
-        else if (EventListViewHolder.getItemViewType() == LIVE) {
+        } else if (EventListViewHolder.getItemViewType() == LIVE) {
             LiveViewHolder mLiveViewHolder = (LiveViewHolder) EventListViewHolder;
-        }
-        else {
+        } else {
             UpcomingViewHolder mUpcomingViewHolder = (UpcomingViewHolder) EventListViewHolder;
             Event event = events.get(i);
             mUpcomingViewHolder.eventName.setText(event.getTitle());
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
-        }
 
+            //Time and Venue
+            String time = "4:30";
+            String loc = "Main Building";
+            String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
+            SpannableString modified_s = new SpannableString(time_venue);
+            modified_s.setSpan(new RelativeSizeSpan(1.4f), 10, 10 + time.length(), 0);
+            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 10, 10 + time.length(), 0);
+            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 11 + time.length(), 14 + time.length(), 0);
+            modified_s.setSpan(new RelativeSizeSpan(1.4f), 18 + time.length(), 18 + time.length() + loc.length(), 0);
+            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 18 + time.length(), 18 + time.length() + loc.length(), 0);
+
+            mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
+
+        }
     }
 
     @Override
@@ -125,13 +148,42 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public class UpcomingViewHolder extends EventListViewHolder {
 
         CardView cardType;
+        RelativeLayout root_layout;
+        LinearLayout container_top;
         TextView eventName;
         TextView eventDescription;
+        TextView eventTimeVenue;
+        ImageView eventPicture;
+        int dominantColor;
 
         public UpcomingViewHolder(View v) {
             super(v);
+            root_layout = (RelativeLayout) v.findViewById(R.id.root_layout_card);
+            container_top = (LinearLayout) v.findViewById(R.id.container_event_title);
+            eventPicture = (ImageView) v.findViewById(R.id.iv_event_pic);
             eventName = (TextView) v.findViewById(R.id.tv_event_name);
+            eventTimeVenue = (TextView) v.findViewById(R.id.tv_time_venue);
             eventDescription = (TextView) v.findViewById(R.id.tv_event_description);
+
+            //For loading big images (temporary)
+            BitmapFactory.Options bm_opts = new BitmapFactory.Options();
+            bm_opts.inScaled = false;
+            Bitmap imageBM = BitmapFactory.decodeResource(v.getResources(), R.drawable.raghu, bm_opts);
+            eventPicture.setImageBitmap(imageBM);
+
+            //To be used for extracting the dominant color
+            Palette.from(imageBM).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    Palette.Swatch vibrantSwatch = palette.getDominantSwatch();
+
+                    if(vibrantSwatch!=null){
+                        container_top.setBackgroundColor((vibrantSwatch.getRgb() & 0x00FFFFFF)| 0x99000000);
+                        root_layout.setBackgroundColor(vibrantSwatch.getRgb());
+                    }
+
+                }
+            });
         }
     }
 }

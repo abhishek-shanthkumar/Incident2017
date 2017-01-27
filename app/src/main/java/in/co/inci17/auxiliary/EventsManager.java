@@ -57,7 +57,7 @@ public class EventsManager {
         events = new ArrayList<>();
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.Keys.ACCOUNT_ID, user.getId());
+//        params.put(Constants.Keys.ACCOUNT_ID, user.getId());
 
         CustomRequest request = new CustomRequest(Request.Method.POST, Constants.URLs.GET_ALL_EVENTS, params,
                 new Response.Listener<JSONArray>() {
