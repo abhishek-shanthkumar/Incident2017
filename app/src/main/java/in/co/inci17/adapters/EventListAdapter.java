@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
@@ -118,10 +119,20 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public class HeaderViewHolder extends EventListViewHolder{
 
         CardView cardType;
-
+        TextView inciTitle, year, theme;
 
         public HeaderViewHolder(View v) {
             super(v);
+            inciTitle = (TextView)v.findViewById(R.id.tv_incident);
+            year = (TextView)v.findViewById(R.id.tv_17);
+            theme = (TextView)v.findViewById(R.id.tv_theme);
+            Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
+            Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
+            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "DancingScrip_Regular.otf");
+
+            inciTitle.setTypeface(typeface_1);
+            year.setTypeface(typeface_2);
+            theme.setTypeface(typeface_3);
 
         }
     }
@@ -130,11 +141,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         RecyclerView rvLiveEvents;
         LiveEventsListAdapter mLiveEventsListAdapter;
+        TextView liveTitle;
         Context context;
 
         public LiveViewHolder(View v) {
             super(v);
             context = v.getContext();
+
+            liveTitle = (TextView) v.findViewById(R.id.tv_live_title);
+            liveTitle.setTypeface(null, Typeface.BOLD);
 
             rvLiveEvents = (RecyclerView)v.findViewById(R.id.rv_live_events);
             mLiveEventsListAdapter = new LiveEventsListAdapter(context);

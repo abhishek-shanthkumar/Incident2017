@@ -2,8 +2,10 @@ package in.co.inci17.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +28,10 @@ public class LiveEventsListAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(LiveEventsViewHolder LiveEventsViewHolder, int i) {
+    public void onBindViewHolder(LiveEventsViewHolder mLiveEventsViewHolder, int i) {
 
-        
+        mLiveEventsViewHolder.liveEventTitle.setText("Eastern Night");
+
     }
 
     @Override
@@ -41,10 +44,18 @@ public class LiveEventsListAdapter extends
     public class LiveEventsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         CardView cardType;
+        TextView liveEventTitle;
 
         public LiveEventsViewHolder(View v) {
             super(v);
             cardType = (CardView) v.findViewById (R.id.cv_live);
+            liveEventTitle = (TextView) v.findViewById (R.id.tv_live_event_title);
+
+            //TextView Marquee
+            liveEventTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            liveEventTitle.setSingleLine(true);
+            liveEventTitle.setMarqueeRepeatLimit(1);
+            liveEventTitle.setSelected(true);
 
             cardType.setOnClickListener(this);
         }

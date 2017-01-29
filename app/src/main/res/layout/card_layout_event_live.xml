@@ -3,35 +3,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#bcbcbc"
+    android:background="@color/ColorPrimary"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#D82B42" />
+
     <TextView
+        android:id="@+id/tv_live_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:text="Happening Now"
-        android:textColor="#000000"
-        android:textSize="16sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:text="HAPPENING NOW"
+        android:textColor="#D82B42"
+        android:alpha="0.8"
+        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_live_events"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:layout_gravity="center"
-        android:background="#bcbcbc"
+        android:background="@android:color/transparent"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingTop="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:paddingBottom="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DACCB9"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DAY 1"
+            android:textColor="#D82B42"
+            android:textSize="40sp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"/>
+        <View
+            android:layout_width="32dp"
+            android:layout_height="4dp"
+            android:layout_marginBottom="8dp"
+            android:background="#D82B42" />
+    </LinearLayout>
+
 
 </LinearLayout>
