@@ -2,4 +2,8 @@
     <string name="app_name">Incident 2017</string>
     <string name="facebook_app_id">1174571632631821</string>
     <string name="fb_login_protocol_scheme">fb1174571632631821</string>
+    <string name="title_activity_second">SecondActivity</string>
+
+    <string name="openDrawer">Open Drawer </string>
+    <string name="closeDrawer">Close Drawer </string>
 </resources>

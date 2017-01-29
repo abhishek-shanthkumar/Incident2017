@@ -233,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         user.setId(accountID);
         User.updateUser(user, this);
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         this.finish();
     }

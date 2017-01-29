@@ -2,7 +2,6 @@ package in.co.inci17.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,7 @@ import in.co.inci17.adapters.ViewPagerAdapterLeaderboard;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     RecyclerView rvEvents;
     EventListAdapter mEventListAdapter;
@@ -33,6 +32,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //NavigationDrawer
+        super.onCreateDrawer();
+        navigationView.getMenu().getItem(0).setChecked(true);
+        at_home=true;
 
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override

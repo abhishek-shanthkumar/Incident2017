@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--Group 1-->
+    <group
+        android:id="@+id/top_part"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_home"
+            android:checked="false"
+            android:icon="@mipmap/ic_home_24_black"
+            android:title="Home"/>
+
+        <item
+            android:id="@+id/item_schedule"
+            android:checked="false"
+            android:icon="@mipmap/ic_schedule_24_black"
+            android:title="Schedule"/>
+
+        <item
+            android:id="@+id/item_bookmark"
+            android:checked="false"
+            android:icon="@mipmap/ic_bookmark_24_black"
+            android:title="Bookmarks" />
+
+        <item
+            android:id="@+id/item_map"
+            android:checked="false"
+            android:icon="@mipmap/ic_map_24_black"
+            android:title="Map" />
+    </group>
+
+    <!--Group 2-->
+    <group
+        android:id="@+id/mid_part"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_invite"
+            android:checked="false"
+            android:icon="@mipmap/ic_invite_24_black"
+            android:title="Invite" />
+
+
+        <item
+            android:id="@+id/item_logout"
+            android:checked="false"
+            android:icon="@mipmap/ic_logout_24"
+            android:title="Logout" />
+
+    </group>
+
+    <!--Group 3-->
+    <group
+        android:id="@+id/bottom_part"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_faq"
+            android:checked="false"
+            android:title="FAQ's" />
+
+        <item
+            android:id="@+id/item_contact"
+            android:checked="false"
+            android:title="Contact" />
+
+        <item
+            android:id="@+id/item_rate"
+            android:checked="false"
+            android:title="Rate App" />
+
+        <item
+            android:id="@+id/item_feedback"
+            android:checked="false"
+            android:title="Feedback" />
+
+        <item
+            android:id="@+id/item_about_us"
+            android:checked="false"
+            android:title="About us" />
+
+    </group>
+
+
+</menu>
