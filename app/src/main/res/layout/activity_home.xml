@@ -47,13 +47,14 @@
                     android:id="@+id/pager_leaderboard"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:visibility="gone"
                     android:background="#D9D9D9" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_events"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#EAEBEC"
+                    android:background="#DACCB9"
                     android:clipToPadding="false"
                     android:paddingBottom="8dp" />
 
@@ -68,9 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/ColorRecyclerBackground"
+        android:background="#FFFFFF"
         app:itemIconTint="@color/selector_drawer_item"
         app:itemTextColor="@color/selector_drawer_item"
+        app:itemBackground="@drawable/bk_drawable_item"
         app:menu="@layout/drawer" />
 
 </android.support.v4.widget.DrawerLayout>

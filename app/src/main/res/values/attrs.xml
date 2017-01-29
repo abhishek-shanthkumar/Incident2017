@@ -7,7 +7,7 @@
         <attr name="border_overlay" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="CustomFontTextView">
+    <declare-styleable name="CustomTextView">
         <attr name="textFont" format="enum">
             <enum name="roboto_black" value="0" />
             <enum name="roboto_blackItalic" value="1" />
@@ -19,7 +19,7 @@
             <enum name="roboto_italic" value="7" />
             <enum name="roboto_light" value="8" />
             <enum name="roboto_lightItalic" value="9" />
-            <enum name="roboto_thin" value="10" />
+            <enum name="Roboto_Thin.ttf" value="10" />
             <enum name="roboto_thinItalic" value="11" />
             <enum name="robotoCondensed_bold" value="12" />
             <enum name="robotoCondensed_boldItalic" value="13" />

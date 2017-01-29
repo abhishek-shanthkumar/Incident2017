@@ -5,14 +5,16 @@
     <color name="ColorWhiteTransparent">#8cffffff</color>
 
    <!--App related-->
-    <color name="ColorPrimary">#F7971d</color>
-    <color name="ColorPrimaryDark">#F58B00</color>
+    <!--<color name="ColorPrimary">#F7971d</color>-->
+    <color name="ColorPrimary">#B7E2E9</color>
+    <color name="ColorPrimaryDark">#92b4ba</color>
 
     <!--RecyclerView-->
-    <color name="ColorRecyclerBackground">#DFDFDF</color>
+    <!--<color name="ColorRecyclerBackground">#DFDFDF</color>-->
+    <color name="ColorRecyclerBackground">#DACCB9</color>
 
     <!--Divider color-->
-    <color name="ColorDivider">#C2C2C2</color>
+    <color name="ColorDivider">#50807360</color>
 
     <!--Text-->
     <color name="ColorTextHeading">#FFFFFF</color>

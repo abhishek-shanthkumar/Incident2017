@@ -23,7 +23,7 @@
         <item
             android:id="@+id/item_bookmark"
             android:checked="false"
-            android:icon="@mipmap/ic_bookmark_24_black"
+            android:icon="@mipmap/ic_collections_bookmark_24_black"
             android:title="Bookmarks" />
 
         <item

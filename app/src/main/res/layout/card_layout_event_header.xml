@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:font="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_event_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,37 +15,56 @@
     card_view:cardPreventCornerOverlap="false"
     card_view:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ColorPrimaryDark"
-        android:orientation="vertical"
+        android:background="#B7E2E9"
+        android:gravity="center"
         android:padding="16dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_incident"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="INCIDENT"
-            android:textColor="#FFFFFF"
-            android:textSize="46sp"
-            android:textStyle="bold" />
+            android:textSize="60sp"
+            android:textColor="#D82B42"
+            android:alpha="0.75"
+            android:text="INCIDENT"/>
+        <TextView
+            android:id="@+id/tv_17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="60sp"
+            android:textColor="#D82B42"
+            android:alpha="1"
+            android:layout_toRightOf="@+id/tv_incident"
+            android:paddingLeft="10dp"
+            android:text="'17" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_theme"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textColor="#D82B42"
+            android:layout_toRightOf="@+id/tv_incident"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="#FFFFFF"
             android:gravity="center"
-            android:text="DAY 1"
-            android:textColor="#aeffffff"
-            android:textSize="30sp" />
+            android:layout_alignLeft="@+id/tv_incident"
+            android:layout_alignRight="@id/tv_17"
+            android:layout_below="@+id/tv_incident"
+            android:text="A COASTAL CARNIVAL" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="10dp"
-            android:background="#FFFFFF" />
-
-    </LinearLayout>
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:background="#D82B42"
+            android:layout_alignTop="@+id/tv_theme"
+            android:layout_toRightOf="@id/tv_theme"
+            android:layout_alignBottom="@id/tv_theme"/>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
