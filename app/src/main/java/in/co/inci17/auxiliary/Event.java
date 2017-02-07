@@ -3,6 +3,13 @@ package in.co.inci17.auxiliary;
  * Created by Abhishek on 19-01-2017.
  */
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 public class Event {
@@ -11,15 +18,13 @@ public class Event {
     private String subtitle;
     private String category;
     private String description;
+    private boolean isRegisterable;
     private boolean hasRegistered;
+    private boolean hasBookmarked;
+    private int attendingCount;
     private String imageUrl;
     private Calendar startDateTime;
     private Calendar endDateTime;
-
-    public Event(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 
     public Event(String id, String title, String subtitle, String category, String description, boolean hasRegistered) {
         this.id = id;
@@ -28,6 +33,30 @@ public class Event {
         this.category = category;
         this.description = description;
         this.hasRegistered = hasRegistered;
+    }
+
+    public boolean isRegisterable() {
+        return isRegisterable;
+    }
+
+    public void setRegisterable(boolean registerable) {
+        isRegisterable = registerable;
+    }
+
+    public int getAttendingCount() {
+        return attendingCount;
+    }
+
+    public void setAttendingCount(int attendingCount) {
+        this.attendingCount = attendingCount;
+    }
+
+    public boolean hasBookmarked() {
+        return hasBookmarked;
+    }
+
+    public void setHasBookmarked(boolean hasBookmarked) {
+        this.hasBookmarked = hasBookmarked;
     }
 
     public String getId() {
@@ -54,7 +83,7 @@ public class Event {
         this.category = category;
     }
 
-    public boolean isHasRegistered() {
+    public boolean hasRegistered() {
         return hasRegistered;
     }
 
@@ -100,5 +129,18 @@ public class Event {
 
     public void setEndDateTime(Calendar endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        try {
+            JSONObject object = new JSONObject(gson.toJson(this));
+            object.remove(Constants.Keys.EVENT_DESCRIPTION);
+            return object.toString();
+        } catch (JSONException e) {
+            Log.e("JSONError", e.getLocalizedMessage());
+        }
+        return "";
     }
 }

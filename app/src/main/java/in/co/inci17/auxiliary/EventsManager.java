@@ -51,8 +51,8 @@ public class EventsManager {
         events = new ArrayList<>();
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
         HashMap<String, String> params = new HashMap<>();
-//        params.put(Constants.Keys.ACCOUNT_ID, user.getId());
-
+        params.put(Constants.Keys.ACCOUNT_ID, user.getId());
+        Log.d("EventsManager", "Fetching events.");
         CustomRequest request = new CustomRequest(Constants.URLs.GET_ALL_EVENTS, params, true,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -61,14 +61,20 @@ public class EventsManager {
                             JSONObject object;
                             for(int i=0; i<array.length(); i++) {
                                 object = array.getJSONObject(i);
-                                events.add(new Event(
+                                //Log.d("EventsManager", "Received object: " + object);
+                                Event event = new Event(
                                         object.getString(Constants.Keys.EVENT_ID),
                                         object.getString(Constants.Keys.EVENT_TITLE),
                                         object.getString(Constants.Keys.EVENT_SUBTITLE),
                                         object.getString(Constants.Keys.EVENT_CATEGORY),
                                         object.getString(Constants.Keys.EVENT_DESCRIPTION),
                                         object.getString(Constants.Keys.EVENT_HAS_REGISTERED).equals("1")
-                                ));
+                                );
+                                event.setRegisterable(object.getString(Constants.Keys.EVENT_REGISTERABLE).equals("1"));
+                                event.setHasBookmarked(object.getString(Constants.Keys.EVENT_ATTENDING).equals("1"));
+                                event.setAttendingCount(object.getInt(Constants.Keys.EVENT_ATTENDING_COUNT));
+                                //Log.d("EventsManager", "Adding event: " + event);
+                                events.add(event);
                             }
                         } catch (JSONException e) {
                             Log.e("JSON Parse", e.getLocalizedMessage());

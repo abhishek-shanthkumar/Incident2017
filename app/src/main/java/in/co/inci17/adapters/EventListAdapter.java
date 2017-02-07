@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -56,6 +57,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private Context context;
     private List<Event> events;
     private RequestQueue mRequestQueue;
+    private User user;
 
     public static final int HEADER = 0;
     public static final int LIVE = 1;
@@ -65,11 +67,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         this.context = context;
         this.events = events;
         mRequestQueue = Volley.newRequestQueue(context);
+        user = User.getCurrentUser(context);
     }
 
     private synchronized void registerForEvent(final int eventIndex) {
         final Event event = events.get(eventIndex);
-        User user = User.getCurrentUser(context);
         HashMap<String, String> params = new HashMap<>();
         String url = Constants.URLs.REGISTER_EVENT;
         assert user != null;
@@ -100,13 +102,65 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, Constants.Messages.NETWORK_ERROR+"\n"+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, Constants.Messages.NETWORK_ERROR, Toast.LENGTH_SHORT).show();
                         //Log.e("Volley", error.networkResponse.toString());
                         //event.setHasRegistered(false);
                         //notifyItemChanged(eventIndex);
                     }
                 });
         mRequestQueue.add(request);
+    }
+
+    private void markEventAsAttending(final int eventIndex) {
+        final Event event = events.get(eventIndex);
+        String url = Constants.URLs.ATTENDING_EVENT;
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.Keys.ACCOUNT_ID, user.getId());
+        params.put(Constants.Keys.EVENT_ID, event.getId());
+        CustomRequest request = new CustomRequest(url, params,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject object = response.getJSONObject(0);
+                            String output = object.getString(Constants.Keys.OUTPUT);
+                            if(output.equals("1")) {
+                                bookmarkEvent(eventIndex);
+                            }
+                            else {
+                                Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
+                                //event.setHasRegistered(false);
+                            }
+                        } catch (JSONException e) {
+                            Log.e("JSONError", e.getLocalizedMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, Constants.Messages.NETWORK_ERROR, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        mRequestQueue.add(request);
+    }
+
+    private void bookmarkEvent(int eventIndex) {
+        Event event = events.get(eventIndex);
+        Gson gson = new Gson();
+        String eventString = gson.toJson(event);
+        Intent notificationIntent = new Intent(context, EventReminder.class);
+        notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long delayInMillis = 5000;
+        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+
+        event.setHasBookmarked(true);
+        notifyItemChanged(eventIndex);
     }
 
     @Override
@@ -125,14 +179,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     }
 
     @Override
-    public void onBindViewHolder(EventListViewHolder EventListViewHolder, int i) {
-        if (EventListViewHolder.getItemViewType() == HEADER) {
-            HeaderViewHolder mHeaderViewHolder = (HeaderViewHolder) EventListViewHolder;
-        } else if (EventListViewHolder.getItemViewType() == LIVE) {
-            LiveViewHolder mLiveViewHolder = (LiveViewHolder) EventListViewHolder;
+    public void onBindViewHolder(EventListViewHolder eventListViewHolder, int i) {
+        if (eventListViewHolder.getItemViewType() == HEADER) {
+            HeaderViewHolder mHeaderViewHolder = (HeaderViewHolder) eventListViewHolder;
+        } else if (eventListViewHolder.getItemViewType() == LIVE) {
+            LiveViewHolder mLiveViewHolder = (LiveViewHolder) eventListViewHolder;
         } else {
-            UpcomingViewHolder mUpcomingViewHolder = (UpcomingViewHolder) EventListViewHolder;
-            Event event = events.get(i);
+            UpcomingViewHolder mUpcomingViewHolder = (UpcomingViewHolder) eventListViewHolder;
+            Event event = events.get(eventListViewHolder.getAdapterPosition());
             mUpcomingViewHolder.eventName.setText(event.getTitle());
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
 
@@ -148,6 +202,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 18 + time.length(), 18 + time.length() + loc.length(), 0);
 
             mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
+            if(event.hasBookmarked())
+                mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
+            else
+                mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
         }
     }
 
@@ -278,27 +336,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
             switch(v.getId()) {
                 case R.id.ib_register:
-                    if(!event.isHasRegistered())
-                        registerForEvent(getAdapterPosition());
+                    if(!event.hasRegistered())
+                        registerForEvent(index);
                     break;
 
                 case R.id.ib_bookmark:
-                    bookmarkEvent(event);
+                    if(!event.hasBookmarked())
+                        markEventAsAttending(index);
                     break;
             }
         }
 
-        private void bookmarkEvent(Event event) {
-            Gson gson = new Gson();
-            String eventString = gson.toJson(event);
-            Intent notificationIntent = new Intent(context, EventReminder.class);
-            notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            long delayInMillis = 5000;
-            long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-        }
     }
 }
