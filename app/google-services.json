@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "342760999217",
-    "project_id": "incident-2017"
+    "firebase_url": "https://incident-2017.firebaseio.com",
+    "project_id": "incident-2017",
+    "storage_bucket": "incident-2017.appspot.com"
   },
   "client": [
     {
@@ -37,6 +39,10 @@
           }
         },
         {
+          "client_id": "342760999217-406na1mn0ismctlcr56gvpurjm9g7ci0.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "342760999217-4imo8ls9eu9m6iks5h5rgjnsr7h8djgl.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -51,11 +57,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342760999217-406na1mn0ismctlcr56gvpurjm9g7ci0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

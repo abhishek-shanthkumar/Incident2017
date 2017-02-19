@@ -26,6 +26,10 @@ public class Event {
     private Calendar startDateTime;
     private Calendar endDateTime;
 
+    public Event() {
+
+    }
+
     public Event(String id, String title, String subtitle, String category, String description, boolean hasRegistered) {
         this.id = id;
         this.title = title;
@@ -142,5 +146,12 @@ public class Event {
             Log.e("JSONError", e.getLocalizedMessage());
         }
         return "";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Event)
+            return ((Event) obj).getId().equals(id);
+        return false;
     }
 }

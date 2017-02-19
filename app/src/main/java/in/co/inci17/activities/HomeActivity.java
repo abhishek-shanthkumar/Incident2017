@@ -8,12 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.android.volley.Response;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventListAdapter;
+import in.co.inci17.adapters.LiveEventsListAdapter;
 import in.co.inci17.adapters.ViewPagerAdapterLeaderboard;
+import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
 
@@ -27,6 +32,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     CharSequence Titles[] = {"Leaderboard_1", "Leaderboard_2"};
 
     private List<Event> events;
+
+    private DatabaseReference mFirebaseDatabaseReference;
+    private FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>
+            mFirebaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(List<Event> response) {
                 events = response;
+                //mEventListAdapter.notifyDataSetChanged();
                 setupRecyclerView();
             }
         });
@@ -56,11 +66,29 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private void setupRecyclerView() {
         //RecyclerView set-up
+        setupLiveEvents();
+
         rvEvents = (RecyclerView)findViewById(R.id.rv_events);
-        mEventListAdapter = new EventListAdapter(getApplicationContext(), events);
+        mEventListAdapter = new EventListAdapter(getApplicationContext(), events, mFirebaseAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setItemAnimator(new DefaultItemAnimator());
         rvEvents.setAdapter(mEventListAdapter);
+
+    }
+
+    private void setupLiveEvents() {
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>(
+                Event.class,
+                R.layout.card_layout_live,
+                LiveEventsListAdapter.LiveEventsViewHolder.class,
+                mFirebaseDatabaseReference.child(Constants.LIVE_EVENTS_CHILD)
+        ) {
+            @Override
+            protected void populateViewHolder(LiveEventsListAdapter.LiveEventsViewHolder viewHolder, Event event, int position) {
+                viewHolder.liveEventTitle.setText(events.get(events.indexOf(event)).getTitle());
+            }
+        };
     }
 
     @Override

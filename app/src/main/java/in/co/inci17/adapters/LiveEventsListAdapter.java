@@ -16,6 +16,8 @@ public class LiveEventsListAdapter extends
 
     Context context;
 
+    public LiveEventsListAdapter() {}
+
     public LiveEventsListAdapter(Context context) {
         this.context = context;
     }
@@ -39,10 +41,10 @@ public class LiveEventsListAdapter extends
         return new LiveEventsViewHolder(itemView);
     }
 
-    public class LiveEventsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class LiveEventsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         CardView cardType;
-        TextView liveEventTitle;
+        public TextView liveEventTitle;
 
         public LiveEventsViewHolder(View v) {
             super(v);

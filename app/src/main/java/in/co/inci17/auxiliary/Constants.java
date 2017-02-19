@@ -8,6 +8,7 @@ public class Constants {
     public static final String SHARED_PREFS_FILE = "InciSharedPrefs";
     public static final String PASSPHRASE = "8d71b02e54993ac4ee2351c9804552549f1bade7";
     public static final String EVENT_STRING = "event_string";
+    public static final String LIVE_EVENTS_CHILD = "live_events";
 
     public static class Messages {
         public static final String NETWORK_ERROR = "Connection problem. Please try later.";

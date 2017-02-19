@@ -33,6 +33,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -58,16 +59,18 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private List<Event> events;
     private RequestQueue mRequestQueue;
     private User user;
+    private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
 
     public static final int HEADER = 0;
     public static final int LIVE = 1;
     public static final int UPCOMING = 2;
 
-    public EventListAdapter(Context context, List<Event> events) {
+    public EventListAdapter(Context context, List<Event> events, FirebaseRecyclerAdapter firebaseRecyclerAdapter) {
         this.context = context;
         this.events = events;
         mRequestQueue = Volley.newRequestQueue(context);
         user = User.getCurrentUser(context);
+        this.mFirebaseRecyclerAdapter = firebaseRecyclerAdapter;
     }
 
     private synchronized void registerForEvent(final int eventIndex) {
@@ -165,7 +168,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     @Override
     public int getItemCount() {
-        return events.size();
+        return events == null ? 0 : events.size();
     }
 
     @Override
@@ -219,7 +222,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         } else if(viewType == LIVE){
             itemView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.card_layout_event_live, viewGroup, false);
-            return new LiveViewHolder(itemView);
+            return new LiveViewHolder(itemView, mFirebaseRecyclerAdapter);
         } else {
             itemView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.card_layout_event_upcoming, viewGroup, false);
@@ -263,19 +266,21 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         LiveEventsListAdapter mLiveEventsListAdapter;
         TextView liveTitle;
         Context context;
+        private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
 
-        public LiveViewHolder(View v) {
+        public LiveViewHolder(View v, FirebaseRecyclerAdapter mFirebaseRecyclerAdapter) {
             super(v);
+            this.mFirebaseRecyclerAdapter = mFirebaseRecyclerAdapter;
             context = v.getContext();
 
             liveTitle = (TextView) v.findViewById(R.id.tv_live_title);
             liveTitle.setTypeface(null, Typeface.BOLD);
 
             rvLiveEvents = (RecyclerView)v.findViewById(R.id.rv_live_events);
-            mLiveEventsListAdapter = new LiveEventsListAdapter(context);
+            //mLiveEventsListAdapter = new LiveEventsListAdapter(context);
             rvLiveEvents.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
             rvLiveEvents.setItemAnimator(new DefaultItemAnimator());
-            rvLiveEvents.setAdapter(mLiveEventsListAdapter);
+            rvLiveEvents.setAdapter(mFirebaseRecyclerAdapter);
 
         }
     }
