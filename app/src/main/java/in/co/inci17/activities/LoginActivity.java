@@ -3,6 +3,7 @@ package in.co.inci17.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +66,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void prepareFacebookSignin() {
+        LoginManager.getInstance().logOut();
+
         callbackManager = CallbackManager.Factory.create();
         facebookSigninButton = (LoginButton) findViewById(R.id.facebook_signin_button);
         facebookSigninButton.setReadPermissions("email");
@@ -93,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        if(object.has(Constants.Keys.EMAIL))
+                        if(object.has("email"))
                             createUser(object);
                         else {
                             Toast.makeText(LoginActivity.this, Constants.Messages.EMAIL_NEEDED, Toast.LENGTH_SHORT).show();
@@ -102,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email");
+        parameters.putString("fields", "id,name,email,picture.width(500).height(500)");
         request.setParameters(parameters);
         request.executeAsync();
     }
@@ -115,6 +118,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+                Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient);
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+
+            }
+        });
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -165,10 +180,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void createUser(JSONObject object) {
         Profile profile = Profile.getCurrentProfile();
         User user = new User();
-        user.setDisplayName(profile.getName());
+        //user.setDisplayName(profile.getName());
         try {
+            user.setDisplayName(object.getString("name"));
             user.setEmail(object.getString("email"));
-            user.setImageUrl(profile.getProfilePictureUri(500, 500).toString());
+            //Log.d("Facebook", object.toString());
+            user.setImageUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
+            //user.setImageUrl(profile.getProfilePictureUri(500, 500).toString());
             Toast.makeText(this, Constants.Messages.FACEBOOK_SIGNIN_SUCCESS +"\nWelcome, "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
             authenticateUserWithServer(user);
         } catch (JSONException e) {

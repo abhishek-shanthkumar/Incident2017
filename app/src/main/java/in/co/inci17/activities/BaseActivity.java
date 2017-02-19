@@ -190,7 +190,10 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.item_logout:
                 fragment = null;
                 Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_SHORT).show();
-                navigationView.getMenu().getItem(5).setChecked(true);
+                //Auth.GoogleSignInApi.revokeAccess(user.getmGoogleApiClient());
+                User.deleteUser(this);
+                intent = new Intent(this, LoginActivity.class);
+                //navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.item_faq:
                 fragment = null;

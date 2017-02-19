@@ -67,6 +67,10 @@ public class User {
         editor.apply();
     }
 
+    public static void deleteUser(Context context) {
+        updateUser(null, context);
+    }
+
     private static boolean createUser(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 Constants.SHARED_PREFS_FILE, Context.MODE_PRIVATE);
