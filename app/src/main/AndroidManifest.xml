@@ -63,6 +63,9 @@
         <activity
             android:name=".activities.AboutUsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.InEventActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".services.EventReminder"

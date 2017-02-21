@@ -1,5 +1,6 @@
 package in.co.inci17.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,6 +22,7 @@ import in.co.inci17.adapters.ViewPagerAdapterLeaderboard;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
+import in.co.inci17.auxiliary.User;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
@@ -41,6 +43,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if ((User.getCurrentUser(this)) == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
 
         //NavigationDrawer
         super.onCreateDrawer();

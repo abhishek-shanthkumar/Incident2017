@@ -46,6 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import in.co.inci17.R;
+import in.co.inci17.activities.InEventActivity;
+import in.co.inci17.activities.InviteActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
@@ -292,7 +294,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     public class UpcomingViewHolder extends EventListViewHolder implements View.OnClickListener {
 
-        CardView cardType;
+        CardView cardUpcomingEvent;
         RelativeLayout root_layout;
         LinearLayout container_top;
         TextView eventName;
@@ -307,6 +309,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         public UpcomingViewHolder(View v) {
             super(v);
+            cardUpcomingEvent = (CardView) v.findViewById(R.id.cv_upcoming_event);
             root_layout = (RelativeLayout) v.findViewById(R.id.root_layout_card);
             container_top = (LinearLayout) v.findViewById(R.id.container_event_title);
             eventPicture = (ImageView) v.findViewById(R.id.iv_event_pic);
@@ -367,6 +370,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
                 }
             };
+
+            cardUpcomingEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context bContext=view.getContext();
+                    Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
+                    bContext.startActivity(intent_to_event_desc);
+                }
+            });
         }
 
         @Override
@@ -375,6 +387,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             Event event = events.get(index);
 
             switch(v.getId()) {
+
+                case R.id.cv_upcoming_event:
+
+                    break;
+
                 case R.id.ib_register:
                     if(!event.hasRegistered())
                         registerForEvent(index);
