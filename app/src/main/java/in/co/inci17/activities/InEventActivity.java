@@ -2,17 +2,24 @@ package in.co.inci17.activities;
 
 import android.animation.ArgbEvaluator;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
+import com.android.volley.Response;
+
+import java.util.List;
 
 import in.co.inci17.Fragments.FragmentEvent;
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventPagerAdapter;
+import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
 
 public class InEventActivity extends AppCompatActivity {
 
     ViewPager vpEvent;
+    List<Event> events;
 
     Integer[] colors = {Color.parseColor("#322426"), Color.parseColor("#2A2865"), Color.parseColor("#322426"), Color.parseColor("#2A2865")};
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -27,7 +34,18 @@ public class InEventActivity extends AppCompatActivity {
         vpEvent.setClipToPadding(false);
         vpEvent.setPageMargin(24);
         vpEvent.setPadding(96, 192, 96, 192);
-        vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager()));
+
+        EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
+            @Override
+            public void onResponse(List<Event> response) {
+                events = response;
+                //vpEvent.getAdapter().notifyDataSetChanged();
+                vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
+                vpEvent.setCurrentItem(getIntent().getIntExtra("id", 0));
+            }
+        });
+
+        //vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
         vpEvent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

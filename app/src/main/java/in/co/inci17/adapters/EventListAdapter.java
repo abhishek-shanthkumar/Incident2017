@@ -47,7 +47,6 @@ import java.util.List;
 
 import in.co.inci17.R;
 import in.co.inci17.activities.InEventActivity;
-import in.co.inci17.activities.InviteActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
@@ -376,6 +375,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 public void onClick(View view) {
                     Context bContext=view.getContext();
                     Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
+                    intent_to_event_desc.putExtra("id", getAdapterPosition());
                     bContext.startActivity(intent_to_event_desc);
                 }
             });
