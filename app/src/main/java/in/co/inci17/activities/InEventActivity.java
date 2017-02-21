@@ -34,6 +34,7 @@ public class InEventActivity extends AppCompatActivity {
         vpEvent.setClipToPadding(false);
         vpEvent.setPageMargin(24);
         vpEvent.setPadding(96, 192, 96, 192);
+        vpEvent.setOffscreenPageLimit(3);
 
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override

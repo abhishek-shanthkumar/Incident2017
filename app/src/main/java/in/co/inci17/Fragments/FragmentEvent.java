@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import in.co.inci17.R;
 import in.co.inci17.auxiliary.Event;
@@ -43,6 +44,7 @@ public class FragmentEvent extends Fragment {
 
         eventName.setText(event.getTitle());
         eventDescription.setText(event.getDescription());
+        Picasso.with(getContext()).load(event.getImageUrl()).resize(350, 160).centerInside().into(eventImage);
 
         return v;
     }
