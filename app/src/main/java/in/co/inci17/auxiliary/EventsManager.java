@@ -40,7 +40,8 @@ public class EventsManager {
 
         if(listeners == null)
             listeners = new ArrayList<>();
-        listeners.add(listener);
+        if(listener != null)
+            listeners.add(listener);
 
         if(!fetchingEvents)
             fetchEvents(context);
@@ -48,7 +49,6 @@ public class EventsManager {
 
     private synchronized static void fetchEvents(Context context) {
         fetchingEvents = true;
-        events = new ArrayList<>();
         RequestQueue mRequestQueue = Volley.newRequestQueue(context);
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.ACCOUNT_ID, user.getId());
@@ -58,6 +58,7 @@ public class EventsManager {
                     @Override
                     public void onResponse(JSONArray array) {
                         try {
+                            events = new ArrayList<>();
                             JSONObject object;
                             for(int i=0; i<array.length(); i++) {
                                 object = array.getJSONObject(i);
@@ -73,6 +74,7 @@ public class EventsManager {
                                 event.setRegisterable(object.getString(Constants.Keys.EVENT_REGISTERABLE).equals("1"));
                                 event.setHasBookmarked(object.getString(Constants.Keys.EVENT_ATTENDING).equals("1"));
                                 event.setAttendingCount(object.getInt(Constants.Keys.EVENT_ATTENDING_COUNT));
+                                event.setImageUrl(object.getString(Constants.Keys.EVENT_IMAGE_URL));
                                 //Log.d("EventsManager", "Adding event: " + event);
                                 events.add(event);
                             }
@@ -87,7 +89,7 @@ public class EventsManager {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Fetch events", error.getLocalizedMessage());
+                        Log.e("Fetch events", error.toString());
                         fetchingEvents = false;
                     }
                 });

@@ -5,9 +5,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
@@ -35,6 +35,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,6 +92,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             String output = object.getString(Constants.Keys.OUTPUT);
                             if(output.equals("1")) {
                                 event.setHasRegistered(true);
+                                markEventAsAttending(eventIndex);
                             }
                             else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
@@ -164,6 +167,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         event.setHasBookmarked(true);
         notifyItemChanged(eventIndex);
+        //EventsManager.getAllEvents(context, null);
     }
 
     @Override
@@ -209,6 +213,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
             else
                 mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
+            Picasso.with(context).load(event.getImageUrl()).resize(360,180).centerCrop().into(mUpcomingViewHolder.mTarget);
         }
     }
 
@@ -298,6 +303,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         ImageButton bookmark;
         ImageButton register;
         ImageButton share;
+        Target mTarget;
 
         public UpcomingViewHolder(View v) {
             super(v);
@@ -308,7 +314,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             eventTimeVenue = (TextView) v.findViewById(R.id.tv_time_venue);
             eventDescription = (TextView) v.findViewById(R.id.tv_event_description);
 
-            //For loading big images (temporary)
+            /*//For loading big images (temporary)
             BitmapFactory.Options bm_opts = new BitmapFactory.Options();
             bm_opts.inScaled = false;
             Bitmap imageBM = BitmapFactory.decodeResource(v.getResources(), R.drawable.raghu, bm_opts);
@@ -326,12 +332,41 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     }
 
                 }
-            });
+            });*/
 
             register = (ImageButton) v.findViewById(R.id.ib_register);
             register.setOnClickListener(this);
             bookmark = (ImageButton) v.findViewById(R.id.ib_bookmark);
             bookmark.setOnClickListener(this);
+
+            mTarget = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    eventPicture.setImageBitmap(bitmap);
+                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            Palette.Swatch vibrantSwatch = palette.getDominantSwatch();
+
+                            if(vibrantSwatch!=null){
+                                container_top.setBackgroundColor((vibrantSwatch.getRgb() & 0x00FFFFFF)| 0x99000000);
+                                root_layout.setBackgroundColor(vibrantSwatch.getRgb());
+                            }
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
         }
 
         @Override
