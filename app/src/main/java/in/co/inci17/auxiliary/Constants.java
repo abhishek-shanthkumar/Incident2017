@@ -44,6 +44,7 @@ public class Constants {
         public static final String EVENT_ATTENDING = "is_attending";
         public static final String EVENT_ATTENDING_COUNT = "attending_count";
         public static final String EVENT_IMAGE_URL = "image_url";
+        public static final String EVENT_ICON_URL = "icon_url";
         public static final String OUTPUT = "output";
 
     }

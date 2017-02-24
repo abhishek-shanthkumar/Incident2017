@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -94,7 +95,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         ) {
             @Override
             protected void populateViewHolder(LiveEventsListAdapter.LiveEventsViewHolder viewHolder, Event event, int position) {
-                viewHolder.liveEventTitle.setText(events.get(events.indexOf(event)).getTitle());
+                Event thisEvent = events.get(events.indexOf(event));
+                viewHolder.liveEventTitle.setText(thisEvent.getTitle());
+                Picasso.with(HomeActivity.this).load(thisEvent.getIconUrl()).into(viewHolder.icon);
+                viewHolder.eventID = event.getId();
             }
         };
     }

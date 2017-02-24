@@ -23,6 +23,7 @@ public class Event {
     private boolean hasBookmarked;
     private int attendingCount;
     private String imageUrl;
+    private String iconUrl;
     private Calendar startDateTime;
     private Calendar endDateTime;
 
@@ -37,6 +38,14 @@ public class Event {
         this.category = category;
         this.description = description;
         this.hasRegistered = hasRegistered;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 
     public boolean isRegisterable() {

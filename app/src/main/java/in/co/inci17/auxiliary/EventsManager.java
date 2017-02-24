@@ -75,6 +75,7 @@ public class EventsManager {
                                 event.setHasBookmarked(object.getString(Constants.Keys.EVENT_ATTENDING).equals("1"));
                                 event.setAttendingCount(object.getInt(Constants.Keys.EVENT_ATTENDING_COUNT));
                                 event.setImageUrl(object.getString(Constants.Keys.EVENT_IMAGE_URL));
+                                event.setIconUrl(object.getString(Constants.Keys.EVENT_ICON_URL));
                                 //Log.d("EventsManager", "Adding event: " + event);
                                 events.add(event);
                             }
