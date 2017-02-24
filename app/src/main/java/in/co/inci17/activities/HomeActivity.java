@@ -109,4 +109,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mEventListAdapter != null)
+            mEventListAdapter.notifyDataSetChanged();
+    }
 }
