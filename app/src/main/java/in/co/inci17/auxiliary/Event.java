@@ -31,6 +31,10 @@ public class Event {
 
     }
 
+    public Event(String eventID) {
+        this.id = eventID;
+    }
+
     public Event(String id, String title, String subtitle, String category, String description, boolean hasRegistered) {
         this.id = id;
         this.title = title;

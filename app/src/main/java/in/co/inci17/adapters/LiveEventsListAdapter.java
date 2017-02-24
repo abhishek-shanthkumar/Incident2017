@@ -69,7 +69,7 @@ public class LiveEventsListAdapter extends
         public void onClick(View view) {
             Context bContext=view.getContext();
             Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
-            intent_to_event_desc.putExtra("id", Integer.parseInt(eventID));
+            intent_to_event_desc.putExtra("id", eventID);
             bContext.startActivity(intent_to_event_desc);
         }
     }

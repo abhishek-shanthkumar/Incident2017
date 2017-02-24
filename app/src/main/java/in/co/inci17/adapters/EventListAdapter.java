@@ -76,8 +76,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         this.mFirebaseRecyclerAdapter = firebaseRecyclerAdapter;
     }
 
-    private synchronized void registerForEvent(final int eventIndex) {
-        final Event event = events.get(eventIndex);
+    private synchronized void registerForEvent(final Event event) {
+        //final Event event = events.get(eventIndex);
         HashMap<String, String> params = new HashMap<>();
         String url = Constants.URLs.REGISTER_EVENT;
         assert user != null;
@@ -93,7 +93,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             String output = object.getString(Constants.Keys.OUTPUT);
                             if(output.equals("1")) {
                                 event.setHasRegistered(true);
-                                markEventAsAttending(eventIndex);
+                                markEventAsAttending(event);
                             }
                             else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
@@ -103,7 +103,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             Log.e("JSONResponse", e.getLocalizedMessage());
                             //event.setHasRegistered(false);
                         }
-                        notifyItemChanged(eventIndex);
+                        notifyItemChanged(events.indexOf(event)+2);
                     }
                 },
                 new Response.ErrorListener() {
@@ -118,8 +118,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mRequestQueue.add(request);
     }
 
-    private void markEventAsAttending(final int eventIndex) {
-        final Event event = events.get(eventIndex);
+    private void markEventAsAttending(final Event event) {
+        //final Event event = events.get(eventIndex);
         String url = Constants.URLs.ATTENDING_EVENT;
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.ACCOUNT_ID, user.getId());
@@ -132,7 +132,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             JSONObject object = response.getJSONObject(0);
                             String output = object.getString(Constants.Keys.OUTPUT);
                             if(output.equals("1")) {
-                                bookmarkEvent(eventIndex);
+                                bookmarkEvent(event);
                             }
                             else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
@@ -153,8 +153,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mRequestQueue.add(request);
     }
 
-    private void bookmarkEvent(int eventIndex) {
-        Event event = events.get(eventIndex);
+    private void bookmarkEvent(Event event) {
+        //Event event = events.get(eventIndex);
         Gson gson = new Gson();
         String eventString = gson.toJson(event);
         Intent notificationIntent = new Intent(context, EventReminder.class);
@@ -167,13 +167,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
 
         event.setHasBookmarked(true);
-        notifyItemChanged(eventIndex);
+        notifyItemChanged(events.indexOf(event)+2);
         //EventsManager.getAllEvents(context, null);
     }
 
     @Override
     public int getItemCount() {
-        return events == null ? 0 : events.size();
+        return events == null ? 2 : events.size()+2;
     }
 
     @Override
@@ -194,10 +194,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             LiveViewHolder mLiveViewHolder = (LiveViewHolder) eventListViewHolder;
         } else {
             UpcomingViewHolder mUpcomingViewHolder = (UpcomingViewHolder) eventListViewHolder;
-            Event event = events.get(eventListViewHolder.getAdapterPosition());
+            Event event = events.get(i-2);
             mUpcomingViewHolder.eventName.setText(event.getTitle());
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
-
+            mUpcomingViewHolder.eventID = event.getId();
             //Time and Venue
             String time = "4:30";
             String loc = "Main Building";
@@ -305,6 +305,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         ImageButton register;
         ImageButton share;
         Target mTarget;
+        String eventID;
 
         public UpcomingViewHolder(View v) {
             super(v);
@@ -375,7 +376,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 public void onClick(View view) {
                     Context bContext=view.getContext();
                     Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
-                    intent_to_event_desc.putExtra("id", getAdapterPosition());
+                    intent_to_event_desc.putExtra("id", eventID);
                     bContext.startActivity(intent_to_event_desc);
                 }
             });
@@ -383,7 +384,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         @Override
         public void onClick(View v) {
-            int index = getAdapterPosition();
+            int index = events.indexOf(new Event(eventID));
+            if(index == -1)
+                return;
             Event event = events.get(index);
 
             switch(v.getId()) {
@@ -394,12 +397,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
                 case R.id.ib_register:
                     if(!event.hasRegistered())
-                        registerForEvent(index);
+                    {
+                        Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
+                        registerForEvent(event);
+                    }
                     break;
 
                 case R.id.ib_bookmark:
                     if(!event.hasBookmarked())
-                        markEventAsAttending(index);
+                        markEventAsAttending(event);
                     break;
             }
         }

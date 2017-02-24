@@ -42,7 +42,7 @@ public class InEventActivity extends AppCompatActivity {
                 events = response;
                 //vpEvent.getAdapter().notifyDataSetChanged();
                 vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
-                vpEvent.setCurrentItem(getIntent().getIntExtra("id", 0));
+                vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
             }
         });
 
