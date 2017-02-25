@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -64,6 +65,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private RequestQueue mRequestQueue;
     private User user;
     private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
+    private int iconWidth, iconHeight;
+
 
     public static final int HEADER = 0;
     public static final int LIVE = 1;
@@ -75,6 +78,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mRequestQueue = Volley.newRequestQueue(context);
         user = User.getCurrentUser(context);
         this.mFirebaseRecyclerAdapter = firebaseRecyclerAdapter;
+
+        Drawable sampleIconDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_eastern_night_36_white);
+        //Log.i("ICONSIZE", sampleIconDrawable.getIntrinsicWidth()+"");
+        iconWidth = sampleIconDrawable.getIntrinsicWidth();
+        iconHeight = sampleIconDrawable.getIntrinsicHeight();
     }
 
     private synchronized void registerForEvent(final Event event) {
@@ -217,7 +225,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_border_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
 
             mUpcomingViewHolder.eventPicture.setImageResource(R.drawable.logo_small); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.logo_small));
-            Picasso.with(context).load(event.getImageUrl()).resize(360,180).centerCrop().into(mUpcomingViewHolder.mTarget);
+            Picasso.with(context).load(event.getImageUrl()).resize(360, 180).centerCrop().into(mUpcomingViewHolder.mTarget);
+            Picasso.with(context).load(event.getIconUrl()).resize(iconWidth, iconHeight).into(mUpcomingViewHolder.logoTarget);
         }
     }
 
@@ -260,8 +269,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             theme = (TextView)v.findViewById(R.id.tv_theme);
             Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
             Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
-            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "DancingScrip_Regular.otf");
-
+            //Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "DancingScrip_Regular.otf");
+            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "lobster.otf");
             inciTitle.setTypeface(typeface_1);
             year.setTypeface(typeface_2);
             theme.setTypeface(typeface_3);
@@ -303,11 +312,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         TextView eventDescription;
         TextView eventTimeVenue;
         ImageView eventPicture;
+        ImageView eventLogo;
         int dominantColor;
         ImageButton bookmark;
         ImageButton register;
         ImageButton share;
         Target mTarget;
+        Target logoTarget;
         String eventID;
 
         public UpcomingViewHolder(View v) {
@@ -316,6 +327,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             root_layout = (RelativeLayout) v.findViewById(R.id.root_layout_card);
             container_top = (LinearLayout) v.findViewById(R.id.container_event_title);
             eventPicture = (ImageView) v.findViewById(R.id.iv_event_pic);
+            eventLogo = (ImageView) v.findViewById(R.id.iv_event_logo);
             eventName = (TextView) v.findViewById(R.id.tv_event_name);
             eventTimeVenue = (TextView) v.findViewById(R.id.tv_time_venue);
             eventDescription = (TextView) v.findViewById(R.id.tv_event_description);
@@ -361,6 +373,23 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
                         }
                     });
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+
+            logoTarget = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    eventLogo.setImageBitmap(bitmap);
                 }
 
                 @Override

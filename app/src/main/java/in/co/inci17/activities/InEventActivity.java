@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,6 +18,7 @@ import in.co.inci17.Fragments.FragmentEvent;
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventPagerAdapter;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
 
 public class InEventActivity extends AppCompatActivity {
 
@@ -44,18 +46,22 @@ public class InEventActivity extends AppCompatActivity {
         Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
         events = gson.fromJson(getIntent().getStringExtra("events"), listOfEvents);
 
-        /*EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
-            @Override
-            public void onResponse(List<Event> response) {
-                events = response;
-                //vpEvent.getAdapter().notifyDataSetChanged();
-                vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
-                vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
-            }
-        });*/
+        if(events == null) {
+            EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
+                @Override
+                public void onResponse(List<Event> response) {
+                    events = response;
+                    //vpEvent.getAdapter().notifyDataSetChanged();
+                    vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
+                    vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
+                }
+            });
+        }
 
-        vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
-        vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
+        else {
+            vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
+            vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
+        }
 
         //vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
         vpEvent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
