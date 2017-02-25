@@ -258,7 +258,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             theme = (TextView)v.findViewById(R.id.tv_theme);
             Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
             Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
-            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "DancingScrip_Regular.otf");
+            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "Lobster_Regular.otf");
 
             inciTitle.setTypeface(typeface_1);
             year.setTypeface(typeface_2);

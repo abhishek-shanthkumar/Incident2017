@@ -11,56 +11,135 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:sothree="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sliding_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#484848"
+            android:gravity="bottom"
+            sothree:umanoDragView="@+id/dragView"
+            sothree:umanoOverlay="true"
+            sothree:umanoPanelHeight="56dp"
+            sothree:umanoParallaxOffset="100dp"
+            sothree:umanoScrollableView="@+id/rv_slamdunk"
+            sothree:umanoShadowHeight="4dp">
 
-            <!-- AppBar Layout   -->
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/appBarLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <include
-                    android:id="@+id/include_acb_home"
-                    layout="@layout/actionbar_home"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlways"></include>
-
-                <include
-                    android:id="@+id/toolbar"
-                    layout="@layout/toolbar" />
-
-
-            </android.support.design.widget.AppBarLayout>
-
-            <LinearLayout
+            <!--Main Layout-->
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/coordinatorLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_height="match_parent">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager_leaderboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:visibility="gone"
-                    android:background="#D9D9D9" />
+                <!-- AppBar Layout   -->
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBarLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_events"
+                    <include
+                        android:id="@+id/include_acb_home"
+                        layout="@layout/actionbar_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin"
+                        app:layout_scrollFlags="scroll|enterAlways"></include>
+
+                    <include
+                        android:id="@+id/toolbar"
+                        layout="@layout/toolbar" />
+
+
+                </android.support.design.widget.AppBarLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#DACCB9"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/pager_leaderboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="#D9D9D9"
+                        android:visibility="gone" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_events"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/ColorRecyclerBackground"
+                        android:clipToPadding="false"
+                        android:paddingBottom="8dp" />
+
+                </LinearLayout>
+
+            </android.support.design.widget.CoordinatorLayout>
+            <!--Sliding Layout-->
+            <LinearLayout
+                android:id="@+id/dragView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:clickable="true"
+                android:clipToPadding="false"
+                android:focusable="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/ColorPrimaryDark"
                     android:clipToPadding="false"
-                    android:paddingBottom="8dp" />
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/shape_arrow_up"
+                        android:layout_width="50dp"
+                        android:layout_height="4dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_keyboard_arrow_up_black_36dp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_slamdunk_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:text="SLAMDUNK SCORES"
+                        android:textColor="#FFFFFF"
+                        android:alpha="0.8"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_alignBottom="@+id/tv_slamdunk_title"
+                        android:layout_marginLeft="72dp"
+                        android:layout_marginRight="72dp"
+                        android:visibility="gone"
+                        android:background="@color/ColorAccent" />
+                </LinearLayout>
+
+                <in.co.inci17.auxiliary.BottomFadeEdgeRV
+                    android:id="@+id/rv_slamdunk"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fadingEdgeLength="150dp"
+                    android:background="@color/ColorPrimary"
+                    android:requiresFadingEdge="vertical" />
 
             </LinearLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
     </FrameLayout>
 
     <!-- The navigation drawer -->
@@ -70,9 +149,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#FFFFFF"
+        app:itemBackground="@drawable/bk_drawable_item"
         app:itemIconTint="@color/selector_drawer_item"
         app:itemTextColor="@color/selector_drawer_item"
-        app:itemBackground="@drawable/bk_drawable_item"
         app:menu="@layout/drawer" />
 
 </android.support.v4.widget.DrawerLayout>
