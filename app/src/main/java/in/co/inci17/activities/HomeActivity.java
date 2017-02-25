@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import in.co.inci17.R;
@@ -34,6 +35,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     ViewPager leaderboardPager;
     CharSequence Titles[] = {"Leaderboard_1", "Leaderboard_2"};
 
+    private boolean onlyShowMyEvents = false;
+
     private List<Event> events;
 
     private DatabaseReference mFirebaseDatabaseReference;
@@ -51,20 +54,33 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             this.finish();
         }
 
+        onlyShowMyEvents = getIntent().getBooleanExtra(Constants.SHOW_ONLY_MY_EVENTS, false);
+
         //NavigationDrawer
         super.onCreateDrawer();
-        navigationView.getMenu().getItem(0).setChecked(true);
-        at_home=true;
+        if(!onlyShowMyEvents) {
+            navigationView.getMenu().getItem(0).setChecked(true);
+            at_home = true;
+        }
+        else
+            navigationView.getMenu().getItem(2).setChecked(true);
 
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override
             public void onResponse(List<Event> response) {
-                events = response;
+                events = new ArrayList<>(response);
+                if(onlyShowMyEvents) {
+                    Event event;
+                    for (int i=0; i<events.size(); i++) {
+                        event = events.get(i);
+                        if(!event.hasBookmarked() || !event.hasRegistered())
+                            events.remove(i);
+                    }
+                }
                 //mEventListAdapter.notifyDataSetChanged();
                 setupRecyclerView();
             }
         });
-
         //Viewpager set-up
         leaderboardPager = (ViewPager) findViewById(R.id.pager_leaderboard);
         mViewPagerAdapterLeaderboard = new ViewPagerAdapterLeaderboard(getSupportFragmentManager(), Titles, 2, this);

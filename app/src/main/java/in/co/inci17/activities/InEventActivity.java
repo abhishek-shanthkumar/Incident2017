@@ -6,20 +6,23 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.android.volley.Response;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import in.co.inci17.Fragments.FragmentEvent;
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventPagerAdapter;
 import in.co.inci17.auxiliary.Event;
-import in.co.inci17.auxiliary.EventsManager;
 
 public class InEventActivity extends AppCompatActivity {
 
     ViewPager vpEvent;
     List<Event> events;
+    List<String> updatedEventIds;
 
     Integer[] colors = {Color.parseColor("#322426"), Color.parseColor("#2A2865"), Color.parseColor("#322426"), Color.parseColor("#2A2865")};
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -29,6 +32,7 @@ public class InEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_event);
 
+        updatedEventIds = new ArrayList<>();
         vpEvent = (ViewPager) findViewById(R.id.vp_event);
 
         vpEvent.setClipToPadding(false);
@@ -36,7 +40,11 @@ public class InEventActivity extends AppCompatActivity {
         vpEvent.setPadding(96, 192, 96, 192);
         vpEvent.setOffscreenPageLimit(3);
 
-        EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
+        Gson gson = new Gson();
+        Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
+        events = gson.fromJson(getIntent().getStringExtra("events"), listOfEvents);
+
+        /*EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override
             public void onResponse(List<Event> response) {
                 events = response;
@@ -44,7 +52,10 @@ public class InEventActivity extends AppCompatActivity {
                 vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
                 vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
             }
-        });
+        });*/
+
+        vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
+        vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
 
         //vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
         vpEvent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

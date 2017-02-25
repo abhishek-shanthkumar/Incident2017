@@ -35,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -42,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -377,6 +379,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     Context bContext=view.getContext();
                     Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
                     intent_to_event_desc.putExtra("id", eventID);
+                    Gson gson = new Gson();
+                    Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
+                    intent_to_event_desc.putExtra("events", gson.toJson(events, listOfEvents));
                     bContext.startActivity(intent_to_event_desc);
                 }
             });

@@ -29,7 +29,7 @@ public class EventReminder extends BroadcastReceiver {
         builder.setContentText(event.getDescription());
         builder.setSmallIcon(R.mipmap.ic_launcher);
 
-        Notification notification = builder.build();
+        Notification notification = new NotificationCompat.BigTextStyle(builder).bigText(event.getDescription()).build();
         notificationManager.notify(Integer.parseInt(event.getId()), notification);
     }
 }
