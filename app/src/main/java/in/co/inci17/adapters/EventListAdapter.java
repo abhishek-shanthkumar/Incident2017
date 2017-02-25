@@ -216,7 +216,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
             else
                 mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
-            Picasso.with(context).load(event.getImageUrl()).resize(360,180).centerCrop().into(mUpcomingViewHolder.mTarget);
+            mUpcomingViewHolder.eventPicture.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.dj));
+            Picasso.with(context).load(event.getImageUrl()).placeholder(R.drawable.dj).resize(360,180).centerCrop().into(mUpcomingViewHolder.mTarget);
         }
     }
 
