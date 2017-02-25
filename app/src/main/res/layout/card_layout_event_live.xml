@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="2dp"
         android:paddingLeft="8dp"
-        android:text="HAPPENING NOW"
+        android:text="Happening Now"
         android:textColor="#D82B42"
         android:alpha="0.8"
         android:textSize="18sp" />
@@ -47,10 +47,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DAY 1"
+            android:text="Events"
             android:textColor="#D82B42"
-            android:textSize="40sp"
-            android:paddingTop="12dp"
+            android:textSize="30sp"
+            android:paddingTop="8dp"
             android:paddingBottom="4dp"/>
         <View
             android:layout_width="32dp"
