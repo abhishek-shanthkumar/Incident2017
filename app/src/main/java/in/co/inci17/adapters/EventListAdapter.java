@@ -44,8 +44,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import in.co.inci17.R;
 import in.co.inci17.activities.InEventActivity;
@@ -66,6 +68,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private User user;
     private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
     private int iconWidth, iconHeight;
+    private SimpleDateFormat timeFormat;
 
 
     public static final int HEADER = 0;
@@ -83,6 +86,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         //Log.i("ICONSIZE", sampleIconDrawable.getIntrinsicWidth()+"");
         iconWidth = sampleIconDrawable.getIntrinsicWidth();
         iconHeight = sampleIconDrawable.getIntrinsicHeight();
+
+        timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
     }
 
     private synchronized void registerForEvent(final Event event) {
@@ -208,15 +213,18 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
             mUpcomingViewHolder.eventID = event.getId();
             //Time and Venue
-            String time = "4:30";
-            String loc = "Main Building";
-            String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
+            String time = timeFormat.format(event.getStartDateTime());
+            String loc = event.getVenue();
+            //String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
+            String time_venue = "Starts at " + time + " in " + loc;
             SpannableString modified_s = new SpannableString(time_venue);
             modified_s.setSpan(new RelativeSizeSpan(1.4f), 10, 10 + time.length(), 0);
             modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 10, 10 + time.length(), 0);
-            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 11 + time.length(), 14 + time.length(), 0);
-            modified_s.setSpan(new RelativeSizeSpan(1.4f), 18 + time.length(), 18 + time.length() + loc.length(), 0);
-            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 18 + time.length(), 18 + time.length() + loc.length(), 0);
+            //modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 11 + time.length(), 14 + time.length(), 0);
+            modified_s.setSpan(new RelativeSizeSpan(1.4f), 14 + time.length(), 14 + time.length() + loc.length(), 0);
+            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 14 + time.length(), 14 + time.length() + loc.length(), 0);
+
+            mUpcomingViewHolder.eventDay.setText("Day " + event.getDay());
 
             mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
             if(event.hasBookmarked())
@@ -311,6 +319,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         TextView eventName;
         TextView eventDescription;
         TextView eventTimeVenue;
+        TextView eventDay;
         ImageView eventPicture;
         ImageView eventLogo;
         int dominantColor;
@@ -331,6 +340,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             eventName = (TextView) v.findViewById(R.id.tv_event_name);
             eventTimeVenue = (TextView) v.findViewById(R.id.tv_time_venue);
             eventDescription = (TextView) v.findViewById(R.id.tv_event_description);
+            eventDay = (TextView) v.findViewById(R.id.tv_event_type);
 
             /*//For loading big images (temporary)
             BitmapFactory.Options bm_opts = new BitmapFactory.Options();

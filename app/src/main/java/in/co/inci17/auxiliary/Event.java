@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class Event {
     private String id;
@@ -24,8 +24,10 @@ public class Event {
     private int attendingCount;
     private String imageUrl;
     private String iconUrl;
-    private Calendar startDateTime;
-    private Calendar endDateTime;
+    private Date startDateTime;
+    private Date endDateTime;
+    private String venue;
+    private String day;
 
     public Event() {
 
@@ -42,6 +44,22 @@ public class Event {
         this.category = category;
         this.description = description;
         this.hasRegistered = hasRegistered;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 
     public String getIconUrl() {
@@ -132,19 +150,19 @@ public class Event {
         this.imageUrl = imageUrl;
     }
 
-    public Calendar getStartDateTime() {
+    public Date getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(Calendar startDateTime) {
+    public void setStartDateTime(Date startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public Calendar getEndDateTime() {
+    public Date getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(Calendar endDateTime) {
+    public void setEndDateTime(Date endDateTime) {
         this.endDateTime = endDateTime;
     }
 
