@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -213,9 +212,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
             mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
             if(event.hasBookmarked())
-                mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
+                mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
             else
-                mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
+                mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_border_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
+
+            mUpcomingViewHolder.eventPicture.setImageResource(R.drawable.logo_small); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.logo_small));
             Picasso.with(context).load(event.getImageUrl()).resize(360,180).centerCrop().into(mUpcomingViewHolder.mTarget);
         }
     }

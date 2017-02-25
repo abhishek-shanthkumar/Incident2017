@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,20 +81,20 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
     }
 
     private void updateView() {
-        int b=getArguments().getInt("pos");
+        /*int b=getArguments().getInt("pos");
         if((b%2)==0)
             eventImage.setImageResource(R.drawable.raghu);
         else
-            eventImage.setImageResource(R.drawable.dj);
+            eventImage.setImageResource(R.drawable.dj);*/
 
         eventName.setText(event.getTitle());
         eventDescription.setText(event.getDescription());
         Picasso.with(context).load(event.getImageUrl()).resize(350, 160).centerInside().into(eventImage);
 
         if(event.hasBookmarked())
-            ivBookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
+            ivBookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //Drawable(ContextCompat.getDrawable(context.getApplicationContext(), ));
         else
-            ivBookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
+            ivBookmark.setImageResource(R.mipmap.ic_bookmark_border_24_white); //Drawable(ContextCompat.getDrawable(context.getApplicationContext(), ));
 
     }
 
