@@ -145,15 +145,6 @@
         android:weightSum="3"
         android:padding="5dp"
         android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/ib_register"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_below="@+id/sv_event_info"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/transparent"
-            android:src="@mipmap/ic_register_24_white" />
 
         <ImageButton
             android:id="@+id/ib_bookmark"
@@ -164,6 +155,16 @@
             android:layout_toLeftOf="@+id/ib_register"
             android:background="@android:color/transparent"
             android:src="@mipmap/ic_bookmark_border_24_white" />
+
+        <ImageButton
+            android:id="@+id/ib_register"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_below="@+id/sv_event_info"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_register_24_white" />
 
         <ImageButton
             android:id="@+id/ib_share"

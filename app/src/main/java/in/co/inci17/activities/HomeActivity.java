@@ -148,7 +148,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         setupLiveEvents();
 
         rvEvents = (RecyclerView)findViewById(R.id.rv_events);
-        mEventListAdapter = new EventListAdapter(getApplicationContext(), events, mFirebaseAdapter);
+        mEventListAdapter = new EventListAdapter(this, events, mFirebaseAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setItemAnimator(new DefaultItemAnimator());
         rvEvents.setAdapter(mEventListAdapter);

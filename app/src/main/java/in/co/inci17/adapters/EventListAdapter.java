@@ -3,13 +3,16 @@ package in.co.inci17.adapters;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.graphics.Palette;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,6 +70,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private User user;
     private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
     private int iconWidth, iconHeight;
+    private AlertDialog.Builder registrationConfirmationDialog;
     //private SimpleDateFormat timeFormat;
 
 
@@ -86,6 +90,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         iconWidth = sampleIconDrawable.getIntrinsicWidth();
         iconHeight = sampleIconDrawable.getIntrinsicHeight();
 
+        registrationConfirmationDialog = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme));
+        registrationConfirmationDialog.setCancelable(true);
+        registrationConfirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
         //timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
     }
 
@@ -439,7 +451,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             int index = events.indexOf(new Event(eventID));
             if(index == -1)
                 return;
-            Event event = events.get(index);
+            final Event event = events.get(index);
 
             switch(v.getId()) {
 
@@ -450,8 +462,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 case R.id.ib_register:
                     if(!event.hasRegistered())
                     {
-                        Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
-                        registerForEvent(event);
+                        registrationConfirmationDialog.setMessage("Register for "+event.getTitle()+"?");
+                        registrationConfirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
+                                registerForEvent(event);
+                            }
+                        });
+                        registrationConfirmationDialog.create().show();
                     }
                     break;
 
