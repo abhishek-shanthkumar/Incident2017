@@ -27,6 +27,9 @@ public class Constants {
     public static class URLs {
         private static final String HOST = "http://incident.co.in/api/";
 
+        public static final String SCHEDULE_URL = "http://incident.co.in/documents/EventSchedule.pdf";
+        public static final String DRIVE_SCHEDULE_URL = "https://drive.google.com/file/d/0BzAWsYclHAMabENfcllSY19wUDA/view";
+
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
         public static final String GET_ALL_EVENTS = HOST+"get-event-details.php";
