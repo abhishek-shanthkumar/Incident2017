@@ -7,10 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Response;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +38,11 @@ public class InEventActivity extends AppCompatActivity {
         vpEvent.setPadding(96, 192, 96, 192);
         vpEvent.setOffscreenPageLimit(3);
 
-        Gson gson = new Gson();
+        /*Gson gson = new Gson();
         Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
-        events = gson.fromJson(getIntent().getStringExtra("events"), listOfEvents);
+        events = gson.fromJson(getIntent().getStringExtra("events"), listOfEvents);*/
+
+        events = EventsManager.currentEvents;
 
         if(events == null) {
             EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {

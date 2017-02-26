@@ -36,6 +36,7 @@ import in.co.inci17.activities.QRCodeDisplayActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
 import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
@@ -61,7 +62,7 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
 
     private static User user;
     private static RequestQueue mRequestQueue;
-    private static AlertDialog.Builder registrationConfirmationDialog;
+    private AlertDialog.Builder registrationConfirmationDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +95,9 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         Gson gson;
         gson = new Gson();
 
-        event = gson.fromJson(getArguments().getString("event"), Event.class);
+        String eventId = getArguments().getString("eventId");
+        event = EventsManager.currentEvents.get(EventsManager.currentEvents.indexOf(new Event(eventId)));
+        //event = gson.fromJson(getArguments().getString("event"), Event.class);
 
         ivBookmark.setOnClickListener(this);
         ivRegister.setOnClickListener(this);
@@ -157,6 +160,7 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
                     intent.putExtra(Constants.QR_CODE_CONTENT, user.getId()+":"+event.getId());
                     context.startActivity(intent);
                 }
+                break;
 
             case R.id.ib_bookmark:
                 if(!event.hasBookmarked())

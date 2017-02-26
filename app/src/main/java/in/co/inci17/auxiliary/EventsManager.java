@@ -31,6 +31,7 @@ public class EventsManager {
     private static boolean fetchingEvents = false;
     private static User user;
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.UK);
+    public static List<Event> currentEvents;
 
     public synchronized static void getAllEvents(Context context, Response.Listener<List<Event>> listener) {
         if(user == null)

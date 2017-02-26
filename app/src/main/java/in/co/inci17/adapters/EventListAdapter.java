@@ -37,7 +37,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -45,7 +44,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +54,7 @@ import in.co.inci17.activities.QRCodeDisplayActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
 import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
@@ -444,9 +443,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     Context bContext=view.getContext();
                     Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
                     intent_to_event_desc.putExtra("id", eventID);
-                    Gson gson = new Gson();
+                    /*Gson gson = new Gson();
                     Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
-                    intent_to_event_desc.putExtra("events", gson.toJson(events, listOfEvents));
+                    intent_to_event_desc.putExtra("events", gson.toJson(events, listOfEvents));*/
+                    EventsManager.currentEvents = events;
                     bContext.startActivity(intent_to_event_desc);
                 }
             });

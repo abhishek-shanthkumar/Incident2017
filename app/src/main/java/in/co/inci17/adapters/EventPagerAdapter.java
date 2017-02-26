@@ -41,6 +41,7 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter {
         registeredFragments.put(position, fragment);
         Bundle b=new Bundle();
         b.putInt("pos",position);
+        b.putString("eventId", events.get(position).getId());
         b.putString("event", gson.toJson(events.get(position)));
         fragment.setArguments(b);
         return fragment;
