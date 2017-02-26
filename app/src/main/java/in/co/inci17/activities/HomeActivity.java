@@ -53,7 +53,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private boolean onlyShowMyEvents = false;
 
-    private List<Event> events;
+    private List<Event> allEvents;
+    private List<Event> adapterEvents;
 
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>
@@ -97,15 +98,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override
             public void onResponse(List<Event> response) {
-                events = new ArrayList<>(response);
+                allEvents = new ArrayList<>(response);
+                adapterEvents = new ArrayList<>();
                 if(onlyShowMyEvents) {
-                    Event event;
-                    for (int i=0; i<events.size(); i++) {
-                        event = events.get(i);
-                        if(!event.hasBookmarked() || !event.hasRegistered())
-                            events.remove(i);
-                    }
+                    for(Event event : allEvents)
+                        if(event.hasRegistered() || event.hasBookmarked())
+                            adapterEvents.add(event);
                 }
+                else
+                    adapterEvents.addAll(allEvents);
+
                 //mEventListAdapter.notifyDataSetChanged();
                 setupRecyclerView();
             }
@@ -148,7 +150,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         setupLiveEvents();
 
         rvEvents = (RecyclerView)findViewById(R.id.rv_events);
-        mEventListAdapter = new EventListAdapter(this, events, mFirebaseAdapter);
+        mEventListAdapter = new EventListAdapter(this, adapterEvents, mFirebaseAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setItemAnimator(new DefaultItemAnimator());
         rvEvents.setAdapter(mEventListAdapter);
@@ -195,7 +197,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         ) {
             @Override
             protected void populateViewHolder(LiveEventsListAdapter.LiveEventsViewHolder viewHolder, Event event, int position) {
-                Event thisEvent = events.get(events.indexOf(event));
+                Event thisEvent = allEvents.get(allEvents.indexOf(event));
                 viewHolder.liveEventTitle.setText(thisEvent.getTitle());
                 Picasso.with(HomeActivity.this).load(thisEvent.getIconUrl()).into(viewHolder.icon);
                 viewHolder.eventID = event.getId();
