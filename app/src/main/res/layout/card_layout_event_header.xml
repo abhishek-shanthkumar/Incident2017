@@ -36,15 +36,15 @@
                 android:id="@+id/tv_incident"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="40sp"
+                android:textSize="50sp"
                 android:textColor="#D82B42"
                 android:alpha="0.75"
-                android:text="INCIDENT"/>
+                android:text="Incident"/>
             <TextView
                 android:id="@+id/tv_17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="40sp"
+                android:textSize="50sp"
                 android:textColor="#D82B42"
                 android:alpha="1"
                 android:layout_toRightOf="@+id/tv_incident"
@@ -55,13 +55,12 @@
                 android:id="@+id/tv_theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:textColor="#D82B42"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:background="#FFFFFF"
                 android:gravity="center"
                 android:layout_alignLeft="@+id/tv_incident"
                 android:layout_alignRight="@id/tv_17"
@@ -74,7 +73,8 @@
                 android:background="#D82B42"
                 android:layout_alignTop="@+id/tv_theme"
                 android:layout_toRightOf="@id/tv_theme"
-                android:layout_alignBottom="@id/tv_theme"/>
+                android:layout_alignBottom="@id/tv_theme"
+                android:visibility="gone"/>
 
         </RelativeLayout>
     </RelativeLayout>

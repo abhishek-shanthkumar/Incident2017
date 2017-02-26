@@ -275,12 +275,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             inciTitle = (TextView)v.findViewById(R.id.tv_incident);
             year = (TextView)v.findViewById(R.id.tv_17);
             theme = (TextView)v.findViewById(R.id.tv_theme);
-            Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
-            Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
+            //Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
+            //Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
             //Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "DancingScrip_Regular.otf");
+            Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Rochester_Regular.otf");
             Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "lobster.otf");
             inciTitle.setTypeface(typeface_1);
-            year.setTypeface(typeface_2);
+            year.setTypeface(typeface_1);
             theme.setTypeface(typeface_3);
 
         }
