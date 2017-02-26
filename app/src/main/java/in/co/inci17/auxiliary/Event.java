@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class Event {
     private String id;
@@ -23,11 +23,18 @@ public class Event {
     private boolean hasBookmarked;
     private int attendingCount;
     private String imageUrl;
-    private Calendar startDateTime;
-    private Calendar endDateTime;
+    private String iconUrl;
+    private Date startDateTime;
+    private Date endDateTime;
+    private String venue;
+    private String day;
 
     public Event() {
 
+    }
+
+    public Event(String eventID) {
+        this.id = eventID;
     }
 
     public Event(String id, String title, String subtitle, String category, String description, boolean hasRegistered) {
@@ -37,6 +44,30 @@ public class Event {
         this.category = category;
         this.description = description;
         this.hasRegistered = hasRegistered;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 
     public boolean isRegisterable() {
@@ -119,19 +150,19 @@ public class Event {
         this.imageUrl = imageUrl;
     }
 
-    public Calendar getStartDateTime() {
+    public Date getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(Calendar startDateTime) {
+    public void setStartDateTime(Date startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public Calendar getEndDateTime() {
+    public Date getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(Calendar endDateTime) {
+    public void setEndDateTime(Date endDateTime) {
         this.endDateTime = endDateTime;
     }
 

@@ -18,7 +18,9 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import in.co.inci17.R;
@@ -49,6 +51,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     ViewPager leaderboardPager;
     CharSequence Titles[] = {"Leaderboard_1", "Leaderboard_2"};
 
+    private boolean onlyShowMyEvents = false;
+
     private List<Event> events;
 
     private DatabaseReference mFirebaseDatabaseReference;
@@ -74,20 +78,33 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             this.finish();
         }
 
+        onlyShowMyEvents = getIntent().getBooleanExtra(Constants.SHOW_ONLY_MY_EVENTS, false);
+
         //NavigationDrawer
         super.onCreateDrawer();
-        navigationView.getMenu().getItem(0).setChecked(true);
-        at_home=true;
+        if(!onlyShowMyEvents) {
+            navigationView.getMenu().getItem(0).setChecked(true);
+            at_home = true;
+        }
+        else
+            navigationView.getMenu().getItem(2).setChecked(true);
 
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override
             public void onResponse(List<Event> response) {
-                events = response;
+                events = new ArrayList<>(response);
+                if(onlyShowMyEvents) {
+                    Event event;
+                    for (int i=0; i<events.size(); i++) {
+                        event = events.get(i);
+                        if(!event.hasBookmarked() || !event.hasRegistered())
+                            events.remove(i);
+                    }
+                }
                 //mEventListAdapter.notifyDataSetChanged();
                 setupRecyclerView();
             }
         });
-
         setupMatchesRecyclerView();
 
         tvSlamDunk = (TextView) findViewById(R.id.tv_slamdunk_title);
@@ -155,7 +172,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         ) {
             @Override
             protected void populateViewHolder(LiveEventsListAdapter.LiveEventsViewHolder viewHolder, Event event, int position) {
-                viewHolder.liveEventTitle.setText(events.get(events.indexOf(event)).getTitle());
+                Event thisEvent = events.get(events.indexOf(event));
+                viewHolder.liveEventTitle.setText(thisEvent.getTitle());
+                Picasso.with(HomeActivity.this).load(thisEvent.getIconUrl()).into(viewHolder.icon);
+                viewHolder.eventID = event.getId();
             }
         };
     }
@@ -175,5 +195,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         } else {
             super.onBackPressed();
         }
+    }
+    protected void onResume() {
+        super.onResume();
+        if(mEventListAdapter != null)
+            mEventListAdapter.notifyDataSetChanged();
     }
 }

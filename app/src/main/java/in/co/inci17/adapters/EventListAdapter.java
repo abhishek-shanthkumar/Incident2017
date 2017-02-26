@@ -35,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -42,21 +43,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import in.co.inci17.R;
 import in.co.inci17.activities.InEventActivity;
-import in.co.inci17.activities.InviteActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
 
-/*
- * Created by RK on 03/11/2016.
- */
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventListViewHolder> {
 
     private Context context;
@@ -64,6 +64,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private RequestQueue mRequestQueue;
     private User user;
     private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
+    private int iconWidth, iconHeight;
+    private SimpleDateFormat timeFormat;
+
 
     public static final int HEADER = 0;
     public static final int LIVE = 1;
@@ -75,10 +78,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mRequestQueue = Volley.newRequestQueue(context);
         user = User.getCurrentUser(context);
         this.mFirebaseRecyclerAdapter = firebaseRecyclerAdapter;
+
+        Drawable sampleIconDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_eastern_night_36_white);
+        //Log.i("ICONSIZE", sampleIconDrawable.getIntrinsicWidth()+"");
+        iconWidth = sampleIconDrawable.getIntrinsicWidth();
+        iconHeight = sampleIconDrawable.getIntrinsicHeight();
+
+        timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
     }
 
-    private synchronized void registerForEvent(final int eventIndex) {
-        final Event event = events.get(eventIndex);
+    private synchronized void registerForEvent(final Event event) {
+        //final Event event = events.get(eventIndex);
         HashMap<String, String> params = new HashMap<>();
         String url = Constants.URLs.REGISTER_EVENT;
         assert user != null;
@@ -94,7 +104,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             String output = object.getString(Constants.Keys.OUTPUT);
                             if(output.equals("1")) {
                                 event.setHasRegistered(true);
-                                markEventAsAttending(eventIndex);
+                                markEventAsAttending(event);
                             }
                             else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
@@ -104,7 +114,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             Log.e("JSONResponse", e.getLocalizedMessage());
                             //event.setHasRegistered(false);
                         }
-                        notifyItemChanged(eventIndex);
+                        notifyItemChanged(events.indexOf(event)+2);
                     }
                 },
                 new Response.ErrorListener() {
@@ -119,8 +129,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mRequestQueue.add(request);
     }
 
-    private void markEventAsAttending(final int eventIndex) {
-        final Event event = events.get(eventIndex);
+    private void markEventAsAttending(final Event event) {
+        //final Event event = events.get(eventIndex);
         String url = Constants.URLs.ATTENDING_EVENT;
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.ACCOUNT_ID, user.getId());
@@ -133,7 +143,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             JSONObject object = response.getJSONObject(0);
                             String output = object.getString(Constants.Keys.OUTPUT);
                             if(output.equals("1")) {
-                                bookmarkEvent(eventIndex);
+                                bookmarkEvent(event);
                             }
                             else {
                                 Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
@@ -154,8 +164,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mRequestQueue.add(request);
     }
 
-    private void bookmarkEvent(int eventIndex) {
-        Event event = events.get(eventIndex);
+    private void bookmarkEvent(Event event) {
+        //Event event = events.get(eventIndex);
         Gson gson = new Gson();
         String eventString = gson.toJson(event);
         Intent notificationIntent = new Intent(context, EventReminder.class);
@@ -168,13 +178,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
 
         event.setHasBookmarked(true);
-        notifyItemChanged(eventIndex);
+        notifyItemChanged(events.indexOf(event)+2);
         //EventsManager.getAllEvents(context, null);
     }
 
     @Override
     public int getItemCount() {
-        return events == null ? 0 : events.size();
+        return events == null ? 2 : events.size()+2;
     }
 
     @Override
@@ -195,27 +205,33 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             LiveViewHolder mLiveViewHolder = (LiveViewHolder) eventListViewHolder;
         } else {
             UpcomingViewHolder mUpcomingViewHolder = (UpcomingViewHolder) eventListViewHolder;
-            Event event = events.get(eventListViewHolder.getAdapterPosition());
+            Event event = events.get(i-2);
             mUpcomingViewHolder.eventName.setText(event.getTitle());
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
-
+            mUpcomingViewHolder.eventID = event.getId();
             //Time and Venue
-            String time = "4:30";
-            String loc = "Main Building";
-            String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
+            String time = timeFormat.format(event.getStartDateTime());
+            String loc = event.getVenue();
+            //String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
+            String time_venue = "Starts at " + time + " in " + loc;
             SpannableString modified_s = new SpannableString(time_venue);
             modified_s.setSpan(new RelativeSizeSpan(1.4f), 10, 10 + time.length(), 0);
             modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 10, 10 + time.length(), 0);
-            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 11 + time.length(), 14 + time.length(), 0);
-            modified_s.setSpan(new RelativeSizeSpan(1.4f), 18 + time.length(), 18 + time.length() + loc.length(), 0);
-            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 18 + time.length(), 18 + time.length() + loc.length(), 0);
+            //modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 11 + time.length(), 14 + time.length(), 0);
+            modified_s.setSpan(new RelativeSizeSpan(1.4f), 14 + time.length(), 14 + time.length() + loc.length(), 0);
+            modified_s.setSpan(new ForegroundColorSpan(Color.WHITE), 14 + time.length(), 14 + time.length() + loc.length(), 0);
+
+            mUpcomingViewHolder.eventDay.setText("Day " + event.getDay());
 
             mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
             if(event.hasBookmarked())
-                mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
+                mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
             else
-                mUpcomingViewHolder.bookmark.setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
-            Picasso.with(context).load(event.getImageUrl()).resize(360,180).centerCrop().into(mUpcomingViewHolder.mTarget);
+                mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_border_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_border_24_white));
+
+            mUpcomingViewHolder.eventPicture.setImageResource(R.drawable.logo_small); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.logo_small));
+            Picasso.with(context).load(event.getImageUrl()).resize(360, 180).centerCrop().into(mUpcomingViewHolder.mTarget);
+            Picasso.with(context).load(event.getIconUrl()).resize(iconWidth, iconHeight).into(mUpcomingViewHolder.logoTarget);
         }
     }
 
@@ -300,12 +316,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         TextView eventName;
         TextView eventDescription;
         TextView eventTimeVenue;
+        TextView eventDay;
         ImageView eventPicture;
+        ImageView eventLogo;
         int dominantColor;
         ImageButton bookmark;
         ImageButton register;
         ImageButton share;
         Target mTarget;
+        Target logoTarget;
+        String eventID;
 
         public UpcomingViewHolder(View v) {
             super(v);
@@ -313,9 +333,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             root_layout = (RelativeLayout) v.findViewById(R.id.root_layout_card);
             container_top = (LinearLayout) v.findViewById(R.id.container_event_title);
             eventPicture = (ImageView) v.findViewById(R.id.iv_event_pic);
+            eventLogo = (ImageView) v.findViewById(R.id.iv_event_logo);
             eventName = (TextView) v.findViewById(R.id.tv_event_name);
             eventTimeVenue = (TextView) v.findViewById(R.id.tv_time_venue);
             eventDescription = (TextView) v.findViewById(R.id.tv_event_description);
+            eventDay = (TextView) v.findViewById(R.id.tv_event_type);
 
             /*//For loading big images (temporary)
             BitmapFactory.Options bm_opts = new BitmapFactory.Options();
@@ -371,11 +393,32 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 }
             };
 
+            logoTarget = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    eventLogo.setImageBitmap(bitmap);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+
             cardUpcomingEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Context bContext=view.getContext();
                     Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
+                    intent_to_event_desc.putExtra("id", eventID);
+                    Gson gson = new Gson();
+                    Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
+                    intent_to_event_desc.putExtra("events", gson.toJson(events, listOfEvents));
                     bContext.startActivity(intent_to_event_desc);
                 }
             });
@@ -383,7 +426,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         @Override
         public void onClick(View v) {
-            int index = getAdapterPosition();
+            int index = events.indexOf(new Event(eventID));
+            if(index == -1)
+                return;
             Event event = events.get(index);
 
             switch(v.getId()) {
@@ -394,15 +439,20 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
                 case R.id.ib_register:
                     if(!event.hasRegistered())
-                        registerForEvent(index);
+                    {
+                        Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
+                        registerForEvent(event);
+                    }
                     break;
 
                 case R.id.ib_bookmark:
                     if(!event.hasBookmarked())
-                        markEventAsAttending(index);
+                        markEventAsAttending(event);
                     break;
             }
         }
 
     }
+
+
 }

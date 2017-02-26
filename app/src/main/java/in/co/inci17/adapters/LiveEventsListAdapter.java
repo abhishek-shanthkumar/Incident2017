@@ -1,15 +1,18 @@
 package in.co.inci17.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import in.co.inci17.R;
+import in.co.inci17.activities.InEventActivity;
 
 public class LiveEventsListAdapter extends
         RecyclerView.Adapter<LiveEventsListAdapter.LiveEventsViewHolder> {
@@ -45,12 +48,14 @@ public class LiveEventsListAdapter extends
 
         CardView cardType;
         public TextView liveEventTitle;
+        public ImageView icon;
+        public String eventID;
 
         public LiveEventsViewHolder(View v) {
             super(v);
             cardType = (CardView) v.findViewById (R.id.cv_live);
             liveEventTitle = (TextView) v.findViewById (R.id.tv_live_event_title);
-
+            icon = (ImageView) v.findViewById(R.id.event_icon);
             //TextView Marquee
             liveEventTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             liveEventTitle.setSingleLine(true);
@@ -61,8 +66,11 @@ public class LiveEventsListAdapter extends
         }
 
         @Override
-        public void onClick(final View view) {
-
+        public void onClick(View view) {
+            Context bContext=view.getContext();
+            Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
+            intent_to_event_desc.putExtra("id", eventID);
+            bContext.startActivity(intent_to_event_desc);
         }
     }
 }

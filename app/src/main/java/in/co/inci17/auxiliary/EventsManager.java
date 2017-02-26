@@ -15,9 +15,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class EventsManager {
 
@@ -25,6 +30,7 @@ public class EventsManager {
     private static List<Event> events;
     private static boolean fetchingEvents = false;
     private static User user;
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.UK);
 
     public synchronized static void getAllEvents(Context context, Response.Listener<List<Event>> listener) {
         if(user == null)
@@ -75,12 +81,31 @@ public class EventsManager {
                                 event.setHasBookmarked(object.getString(Constants.Keys.EVENT_ATTENDING).equals("1"));
                                 event.setAttendingCount(object.getInt(Constants.Keys.EVENT_ATTENDING_COUNT));
                                 event.setImageUrl(object.getString(Constants.Keys.EVENT_IMAGE_URL));
-                                //Log.d("EventsManager", "Adding event: " + event);
+                                event.setIconUrl(object.getString(Constants.Keys.EVENT_ICON_URL));
+                                event.setVenue(object.getString(Constants.Keys.EVENT_VENUE));
+                                event.setDay(object.getString(Constants.Keys.EVENT_DAY));
+                                try {
+                                    //Date calendar = Calendar.getInstance();
+                                    //calendar.setTime(timeFormat.parse(object.getString(Constants.Keys.EVENT_START_TIME)));
+                                    event.setStartDateTime(timeFormat.parse(object.getString(Constants.Keys.EVENT_START_TIME)));
+                                } catch (ParseException e) {
+                                    Log.e("TimeParse", e.getLocalizedMessage());
+                                }
+                                //Log.d("EventsManager", object.getString(Constants.Keys.EVENT_START_TIME));
                                 events.add(event);
                             }
                         } catch (JSONException e) {
                             Log.e("JSON Parse", e.getLocalizedMessage());
                         }
+
+                        Collections.sort(events, new Comparator<Event>() {
+                            @Override
+                            public int compare(Event e1, Event e2) {
+                                String e1Day = e1.getDay().split(",")[0];
+                                String e2Day = e2.getDay().split(",")[0];
+                                return e1Day.compareTo(e2Day);
+                            }
+                        });
                         for(Response.Listener<List<Event>> listener : listeners)
                             listener.onResponse(events);
                         fetchingEvents = false;

@@ -7,18 +7,27 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
+import java.util.List;
+
 import in.co.inci17.Fragments.FragmentEvent;
+import in.co.inci17.auxiliary.Event;
 
 public class EventPagerAdapter extends FragmentStatePagerAdapter {
     SparseArray<Fragment> registeredFragments = new SparseArray<>();
+    List<Event> events;
+    Gson gson;
 
-    public EventPagerAdapter(FragmentManager fm) {
+    public EventPagerAdapter(FragmentManager fm, List<Event> events) {
         super(fm);
+        this.events = events;
+        gson = new Gson();
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return events == null ? 0 : events.size();
     }
 
     @Override
@@ -32,6 +41,7 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter {
         registeredFragments.put(position, fragment);
         Bundle b=new Bundle();
         b.putInt("pos",position);
+        b.putString("event", gson.toJson(events.get(position)));
         fragment.setArguments(b);
         return fragment;
     }
@@ -44,5 +54,14 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter {
 
     public Fragment getRegisteredFragment(int position) {
         return registeredFragments.get(position);
+    }
+
+    @Override
+    public void finishUpdate(ViewGroup container) {
+        try{
+            super.finishUpdate(container);
+        } catch (NullPointerException nullPointerException){
+            System.out.println("Catch the NullPointerException in FragmentPagerAdapter.finishUpdate");
+        }
     }
 }

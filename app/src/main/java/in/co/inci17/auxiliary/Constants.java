@@ -9,6 +9,7 @@ public class Constants {
     public static final String PASSPHRASE = "8d71b02e54993ac4ee2351c9804552549f1bade7";
     public static final String EVENT_STRING = "event_string";
     public static final String LIVE_EVENTS_CHILD = "live_events";
+    public static final String SHOW_ONLY_MY_EVENTS = "show_mine";
 
     public static class Messages {
         public static final String NETWORK_ERROR = "Connection problem. Please try later.";
@@ -44,6 +45,11 @@ public class Constants {
         public static final String EVENT_ATTENDING = "is_attending";
         public static final String EVENT_ATTENDING_COUNT = "attending_count";
         public static final String EVENT_IMAGE_URL = "image_url";
+        public static final String EVENT_ICON_URL = "icon_url";
+        public static final String EVENT_VENUE = "venue";
+        public static final String EVENT_DAY = "day";
+        public static final String EVENT_START_TIME = "start_time";
+        public static final String EVENT_END_TIME = "end_time";
         public static final String OUTPUT = "output";
 
     }

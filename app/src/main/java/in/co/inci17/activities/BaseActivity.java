@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import in.co.inci17.R;
 import in.co.inci17.auxiliary.CircularImageView;
+import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.User;
 
 public class BaseActivity extends AppCompatActivity {
@@ -168,6 +168,7 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.item_home:
                 fragment = null;
                 intent = new Intent(this, HomeActivity.class);
+                //navigationView.getMenu().getItem(0).setChecked(true);
                 break;
             case R.id.item_schedule:
                 fragment = null;
@@ -175,7 +176,9 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case R.id.item_bookmark:
                 fragment = null;
-                intent = new Intent(this, BookmarkActivity.class);
+                intent = new Intent(this, HomeActivity.class);
+                intent.putExtra(Constants.SHOW_ONLY_MY_EVENTS, true);
+                //navigationView.getMenu().getItem(2).setChecked(true);
                 break;
 
             case R.id.item_map:
