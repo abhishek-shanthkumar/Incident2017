@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,6 +32,7 @@ import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomTypefaceSpan;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
+import in.co.inci17.auxiliary.SlamdunkMatch;
 import in.co.inci17.auxiliary.User;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
@@ -58,6 +58,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>
             mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<SlamdunkMatch, SlamDunkMatchesAdapter.SlamDunkMatchViewHolder> mSlamDunkFirebaseAdapter;
 
     TextView tvSlamDunk;
 
@@ -67,6 +68,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         //Font declarations
         tf_RobotoSlabBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoSlab_Bold.ttf");
@@ -155,17 +158,35 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private void setupMatchesRecyclerView() {
         //RecyclerView set-up
 //        setupLiveEvents();
+        mSlamDunkFirebaseAdapter = new FirebaseRecyclerAdapter<SlamdunkMatch, SlamDunkMatchesAdapter.SlamDunkMatchViewHolder>(
+                SlamdunkMatch.class,
+                R.layout.card_layout_slamdunk_scorecard,
+                SlamDunkMatchesAdapter.SlamDunkMatchViewHolder.class,
+                mFirebaseDatabaseReference.child(Constants.SLAM_DUNK_CHILD)
+        ) {
+            @Override
+            protected void populateViewHolder(SlamDunkMatchesAdapter.SlamDunkMatchViewHolder viewHolder, SlamdunkMatch match, int position) {
+                viewHolder.team_name_1.setText(match.getTeamA());
+                viewHolder.team_name_2.setText(match.getTeamB());
+                viewHolder.team_score_1.setText(match.getScoreA());
+                viewHolder.team_score_2.setText(match.getScoreB());
+                viewHolder.quarter.setText(match.getQuarter());
+                if(match.getWinner().equals(Constants.WINNER_UNDECIDED))
+                    viewHolder.match_review.setText(Constants.IN_PROGRESS);
+                else
+                    viewHolder.match_review.setText("Winner: "+match.getWinner());
+            }
+        };
         mSlamDunkMatches = (BottomFadeEdgeRV) findViewById(R.id.rv_slamdunk);
 
         mLayoutManager = new LinearLayoutManager(this);
-        mSlamDunkMatchesAdapter = new SlamDunkMatchesAdapter(getApplicationContext());
+        //mSlamDunkMatchesAdapter = new SlamDunkMatchesAdapter(getApplicationContext());
         mSlamDunkMatches.setLayoutManager(mLayoutManager);
         mSlamDunkMatches.setItemAnimator(new DefaultItemAnimator());
-        mSlamDunkMatches.setAdapter(mSlamDunkMatchesAdapter);
+        mSlamDunkMatches.setAdapter(mSlamDunkFirebaseAdapter);
     }
 
     private void setupLiveEvents() {
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>(
                 Event.class,
                 R.layout.card_layout_live,
