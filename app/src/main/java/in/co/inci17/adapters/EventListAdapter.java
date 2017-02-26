@@ -52,6 +52,7 @@ import java.util.List;
 
 import in.co.inci17.R;
 import in.co.inci17.activities.InEventActivity;
+import in.co.inci17.activities.QRCodeDisplayActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
@@ -90,7 +91,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         iconWidth = sampleIconDrawable.getIntrinsicWidth();
         iconHeight = sampleIconDrawable.getIntrinsicHeight();
 
-        registrationConfirmationDialog = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme));
+        registrationConfirmationDialog = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme_Dialog));
         registrationConfirmationDialog.setCancelable(true);
         registrationConfirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
@@ -245,6 +246,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mUpcomingViewHolder.eventDay.setText("Day " + event.getDay());
 
             mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
+
+            if(event.hasRegistered())
+                mUpcomingViewHolder.register.setImageResource(R.drawable.ic_qr_code);
+            else
+                mUpcomingViewHolder.register.setImageResource(R.mipmap.ic_register_24_white);
             if(event.hasBookmarked())
                 mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
             else
@@ -471,6 +477,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                             }
                         });
                         registrationConfirmationDialog.create().show();
+                    }
+                    else {
+                        Intent intent = new Intent(context, QRCodeDisplayActivity.class);
+                        intent.putExtra(Constants.QR_CODE_CONTENT, user.getId()+":"+event.getId());
+                        context.startActivity(intent);
                     }
                     break;
 
