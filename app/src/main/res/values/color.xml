@@ -8,6 +8,7 @@
     <!--<color name="ColorPrimary">#F7971d</color>-->
     <color name="ColorPrimary">#B7E2E9</color>
     <color name="ColorPrimaryDark">#92b4ba</color>
+    <color name="ColorAccent">#D82B42</color>
 
     <!--RecyclerView-->
     <!--<color name="ColorRecyclerBackground">#DFDFDF</color>-->
