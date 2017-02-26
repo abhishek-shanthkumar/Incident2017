@@ -48,7 +48,7 @@ public class InEventActivity extends AppCompatActivity {
             EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
                 @Override
                 public void onResponse(List<Event> response) {
-                    events = response;
+                    events = new ArrayList<>(response);
                     //vpEvent.getAdapter().notifyDataSetChanged();
                     vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
                     vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
@@ -119,6 +119,12 @@ public class InEventActivity extends AppCompatActivity {
 
             }
         });*/
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventsManager.currentEvents = null;
     }
 }
 

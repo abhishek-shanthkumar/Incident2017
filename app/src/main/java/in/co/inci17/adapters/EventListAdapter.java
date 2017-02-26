@@ -313,7 +313,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public class LiveViewHolder extends EventListViewHolder{
 
         RecyclerView rvLiveEvents;
-        LiveEventsListAdapter mLiveEventsListAdapter;
         TextView liveTitle;
         Context context;
         private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
@@ -327,7 +326,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             liveTitle.setTypeface(null, Typeface.BOLD);
 
             rvLiveEvents = (RecyclerView)v.findViewById(R.id.rv_live_events);
-            //mLiveEventsListAdapter = new LiveEventsListAdapter(context);
             rvLiveEvents.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
             rvLiveEvents.setItemAnimator(new DefaultItemAnimator());
             rvLiveEvents.setAdapter(mFirebaseRecyclerAdapter);

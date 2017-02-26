@@ -61,7 +61,8 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter {
     public void finishUpdate(ViewGroup container) {
         try{
             super.finishUpdate(container);
-        } catch (NullPointerException nullPointerException){
+            //events = null;
+        } catch (Exception nullPointerException){
             System.out.println("Catch the NullPointerException in FragmentPagerAdapter.finishUpdate");
         }
     }

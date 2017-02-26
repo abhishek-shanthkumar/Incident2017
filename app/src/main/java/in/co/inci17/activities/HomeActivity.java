@@ -1,15 +1,19 @@
 package in.co.inci17.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -24,7 +28,6 @@ import java.util.List;
 
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventListAdapter;
-import in.co.inci17.adapters.LiveEventsListAdapter;
 import in.co.inci17.adapters.SlamDunkMatchesAdapter;
 import in.co.inci17.adapters.ViewPagerAdapterLeaderboard;
 import in.co.inci17.auxiliary.BottomFadeEdgeRV;
@@ -57,7 +60,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private List<Event> adapterEvents;
 
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>
+    private FirebaseRecyclerAdapter<Event, LiveEventsViewHolder>
             mFirebaseAdapter;
     private FirebaseRecyclerAdapter<SlamdunkMatch, SlamDunkMatchesAdapter.SlamDunkMatchViewHolder> mSlamDunkFirebaseAdapter;
 
@@ -92,6 +95,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         else {
             //getSupportActionBar().setTitle("My Events");
+            ((TextView) findViewById(R.id.tv_title)).setText("Bookmarks");
             navigationView.getMenu().getItem(2).setChecked(true);
         }
 
@@ -189,18 +193,28 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void setupLiveEvents() {
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>(
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Event, LiveEventsViewHolder>(
                 Event.class,
                 R.layout.card_layout_live,
-                LiveEventsListAdapter.LiveEventsViewHolder.class,
+                LiveEventsViewHolder.class,
                 mFirebaseDatabaseReference.child(Constants.LIVE_EVENTS_CHILD)
         ) {
             @Override
-            protected void populateViewHolder(LiveEventsListAdapter.LiveEventsViewHolder viewHolder, Event event, int position) {
-                Event thisEvent = allEvents.get(allEvents.indexOf(event));
+            protected void populateViewHolder(LiveEventsViewHolder viewHolder, Event event, int position) {
+                final Event thisEvent = allEvents.get(allEvents.indexOf(event));
                 viewHolder.liveEventTitle.setText(thisEvent.getTitle());
                 Picasso.with(HomeActivity.this).load(thisEvent.getIconUrl()).into(viewHolder.icon);
                 viewHolder.eventID = event.getId();
+                final Context context = HomeActivity.this;
+                viewHolder.cardType.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent_to_event_desc = new Intent(context, InEventActivity.class);
+                        intent_to_event_desc.putExtra("id", thisEvent.getId());
+                        EventsManager.currentEvents = allEvents;
+                        context.startActivity(intent_to_event_desc);
+                    }
+                });
             }
         };
     }
@@ -225,5 +239,36 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         if(mEventListAdapter != null)
             mEventListAdapter.notifyDataSetChanged();
+    }
+
+    public static class LiveEventsViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/{
+
+        CardView cardType;
+        public TextView liveEventTitle;
+        public ImageView icon;
+        public String eventID;
+        private Context context;
+
+        public LiveEventsViewHolder(View v) {
+            super(v);
+            cardType = (CardView) v.findViewById (R.id.cv_live);
+            liveEventTitle = (TextView) v.findViewById (R.id.tv_live_event_title);
+            icon = (ImageView) v.findViewById(R.id.event_icon);
+            //TextView Marquee
+            liveEventTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            liveEventTitle.setSingleLine(true);
+            liveEventTitle.setMarqueeRepeatLimit(1);
+            liveEventTitle.setSelected(true);
+            //context = HomeActivity.this;
+            //cardType.setOnClickListener(this);
+        }
+
+        /*@Override
+        public void onClick(View view) {
+            Intent intent_to_event_desc = new Intent(context, InEventActivity.class);
+            intent_to_event_desc.putExtra("id", eventID);
+            EventsManager.currentEvents = allEvents;
+            context.startActivity(intent_to_event_desc);
+        }*/
     }
 }

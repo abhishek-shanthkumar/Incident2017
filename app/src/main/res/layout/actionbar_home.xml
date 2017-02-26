@@ -60,7 +60,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:text="Home"
-                android:textColor="#807360"
+                android:textColor="@color/ColorAccent"
                 android:textSize="22sp" />
 
             <TextView
