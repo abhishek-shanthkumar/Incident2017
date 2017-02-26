@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -270,5 +271,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             EventsManager.currentEvents = allEvents;
             context.startActivity(intent_to_event_desc);
         }*/
+    }
+
+    //Functon for getting searched Events
+    protected List<Event> getSearchedEvents(String keyword){
+        keyword=keyword.toLowerCase();
+        List<Event> matchedEvents;
+        for(Event event : adapterEvents){
+            if(event.getTitle().contains(keyword) || (event.getSubtitle().contains(keyword) || (event.getDescription().contains(keyword)
+            {
+                matchedEvents.add(event);
+            }
+        }
+        return matchedEvents;
     }
 }
