@@ -23,13 +23,14 @@ public class EventReminder extends BroadcastReceiver {
         String eventString = intent.getStringExtra(Constants.EVENT_STRING);
         Gson gson = new Gson();
         Event event = gson.fromJson(eventString, Event.class);
+        String startString = "Starting at "+event.getVenue() + " in " + Constants.BEFORE_MINUTES + " minutes";
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(event.getTitle());
-        builder.setContentText(event.getDescription());
+        builder.setContentText(startString);
         builder.setSmallIcon(R.mipmap.ic_launcher);
 
-        Notification notification = new NotificationCompat.BigTextStyle(builder).bigText(event.getDescription()).build();
+        Notification notification = new NotificationCompat.BigTextStyle(builder).bigText(startString+"\n"+event.getDescription()).build();
         notificationManager.notify(Integer.parseInt(event.getId()), notification);
     }
 }

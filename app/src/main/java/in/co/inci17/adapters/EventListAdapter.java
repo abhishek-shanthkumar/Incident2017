@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
@@ -45,6 +44,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -175,10 +175,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long delayInMillis = 5000;
-        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;
+        //Calendar now = Calendar.getInstance();
+
+        Calendar then = Calendar.getInstance();
+        then.setTime(event.getStartDateTime());
+        then.set(2017, 2, 1+Integer.parseInt(event.getDay().split(",")[0]));
+
+        /*long delayInMillis = 5000;
+        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;*/
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis() - Constants.ALARM_BEFORE_TIME, pendingIntent);
 
         event.setHasBookmarked(true);
         notifyItemChanged(events.indexOf(event)+2);

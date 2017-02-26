@@ -13,6 +13,8 @@ public class Constants {
     public static final String WINNER_UNDECIDED = "undecided";
     public static final String IN_PROGRESS = "Match in progress";
     public static final String SHOW_ONLY_MY_EVENTS = "show_mine";
+    public static final long BEFORE_MINUTES = 30;
+    public static final long ALARM_BEFORE_TIME = BEFORE_MINUTES * 60 * 1000;
 
     public static class Messages {
         public static final String NETWORK_ERROR = "Connection problem. Please try later.";
