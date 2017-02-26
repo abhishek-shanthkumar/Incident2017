@@ -38,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="50sp"
                 android:textColor="#D82B42"
-                android:alpha="0.75"
                 android:text="Incident"/>
             <TextView
                 android:id="@+id/tv_17"
