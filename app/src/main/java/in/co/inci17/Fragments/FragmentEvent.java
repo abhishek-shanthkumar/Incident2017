@@ -3,9 +3,12 @@ package in.co.inci17.Fragments;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import in.co.inci17.R;
+import in.co.inci17.activities.QRCodeDisplayActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
@@ -57,6 +61,7 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
 
     private static User user;
     private static RequestQueue mRequestQueue;
+    private static AlertDialog.Builder registrationConfirmationDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +69,16 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         context = getContext();
         if(mRequestQueue == null)
             mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        if(registrationConfirmationDialog == null) {
+            registrationConfirmationDialog = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme_Dialog));
+            registrationConfirmationDialog.setCancelable(true);
+            registrationConfirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+        }
         if(user == null)
             user = User.getCurrentUser(context);
 
@@ -103,6 +118,11 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         eventVenue.setText(event.getVenue());
         Picasso.with(context).load(event.getImageUrl()).resize(350, 160).centerInside().into(eventImage);
 
+        if(event.hasRegistered())
+            ivRegister.setImageResource(R.drawable.ic_qr_code);
+        else
+            ivRegister.setImageResource(R.mipmap.ic_register_24_white);
+
         if(event.hasBookmarked())
             ivBookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //Drawable(ContextCompat.getDrawable(context.getApplicationContext(), ));
         else
@@ -122,10 +142,21 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
             case R.id.ib_register:
                 if(!event.hasRegistered())
                 {
-                    Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
-                    registerForEvent(event);
+                    registrationConfirmationDialog.setMessage("Register for "+event.getTitle()+"?");
+                    registrationConfirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
+                            registerForEvent(event);
+                        }
+                    });
+                    registrationConfirmationDialog.create().show();
                 }
-                break;
+                else {
+                    Intent intent = new Intent(context, QRCodeDisplayActivity.class);
+                    intent.putExtra(Constants.QR_CODE_CONTENT, user.getId()+":"+event.getId());
+                    context.startActivity(intent);
+                }
 
             case R.id.ib_bookmark:
                 if(!event.hasBookmarked())

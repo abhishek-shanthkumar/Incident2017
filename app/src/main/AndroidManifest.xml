@@ -73,7 +73,11 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".activities.LoginActivity"/>
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.QRCodeDisplayActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+
+        </activity>
     </application>
 
 </manifest>
