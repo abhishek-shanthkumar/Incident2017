@@ -14,7 +14,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.co.inci17.Fragments.FragmentEvent;
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventPagerAdapter;
 import in.co.inci17.auxiliary.Event;
@@ -63,7 +62,9 @@ public class InEventActivity extends AppCompatActivity {
             vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
         }
 
-        //vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
+        vpEvent.setBackgroundColor(Color.parseColor("#535454"));
+
+        /*//vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
         vpEvent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -118,7 +119,7 @@ public class InEventActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
     }
 }
 

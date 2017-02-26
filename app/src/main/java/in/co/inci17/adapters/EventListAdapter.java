@@ -43,17 +43,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import in.co.inci17.R;
 import in.co.inci17.activities.InEventActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
 
@@ -68,7 +67,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private User user;
     private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
     private int iconWidth, iconHeight;
-    private SimpleDateFormat timeFormat;
+    //private SimpleDateFormat timeFormat;
 
 
     public static final int HEADER = 0;
@@ -87,7 +86,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         iconWidth = sampleIconDrawable.getIntrinsicWidth();
         iconHeight = sampleIconDrawable.getIntrinsicHeight();
 
-        timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
+        //timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
     }
 
     private synchronized void registerForEvent(final Event event) {
@@ -220,7 +219,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
             mUpcomingViewHolder.eventID = event.getId();
             //Time and Venue
-            String time = timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
+            String time = Helper.timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
             String loc = event.getVenue();
             //String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
             String time_venue = "Starts at " + time + " in " + loc;

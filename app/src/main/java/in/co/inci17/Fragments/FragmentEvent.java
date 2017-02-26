@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,12 +25,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import in.co.inci17.R;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
 
@@ -46,6 +47,10 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
     TextView eventDescription;
     ImageView ivRegister;
     ImageView ivBookmark;
+    TextView eventDay;
+    TextView eventStartTime;
+    TextView eventVenue;
+
 
     private Context context;
     private Event event;
@@ -67,6 +72,9 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         eventDescription = (TextView) v.findViewById(R.id.tv_desc);
         ivBookmark = (ImageView) v.findViewById(R.id.ib_bookmark);
         ivRegister = (ImageView) v.findViewById(R.id.ib_register);
+        eventDay = (TextView) v.findViewById(R.id.tv_title_1);
+        eventStartTime = (TextView) v.findViewById(R.id.tv_start_time);
+        eventVenue = (TextView) v.findViewById(R.id.tv_venue);
 
         Gson gson;
         gson = new Gson();
@@ -89,6 +97,10 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
 
         eventName.setText(event.getTitle());
         eventDescription.setText(event.getDescription());
+        eventDay.setText("Day "+event.getDay());
+        String time = Helper.timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
+        eventStartTime.setText(time);
+        eventVenue.setText(event.getVenue());
         Picasso.with(context).load(event.getImageUrl()).resize(350, 160).centerInside().into(eventImage);
 
         if(event.hasBookmarked())
@@ -207,10 +219,17 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long delayInMillis = 5000;
-        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;
+        //Calendar now = Calendar.getInstance();
+
+        Calendar then = Calendar.getInstance();
+        then.setTime(event.getStartDateTime());
+        then.set(2017, 2, 1+Integer.parseInt(event.getDay().split(",")[0]));
+
+        /*long delayInMillis = 5000;
+        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;*/
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis() - Constants.ALARM_BEFORE_TIME, pendingIntent);
 
         event.setHasBookmarked(true);
         updateView();

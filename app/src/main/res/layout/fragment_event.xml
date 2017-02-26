@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bk_event_info"
@@ -23,7 +23,8 @@
         android:layout_below="@+id/tv_event_name"
         android:layout_width="match_parent"
         android:background="#EAEBEC"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:alpha="0.5"
-                        android:text="STARTS IN"
+                        android:text="Day 1"
                         android:textColor="#000000"
                         android:textSize="14sp" />
 
@@ -96,7 +97,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:alpha="0.5"
-                        android:text="AT"
+                        android:text="At"
                         android:textColor="#000000"
                         android:textSize="14sp" />
 
@@ -137,36 +138,44 @@
         </LinearLayout>
     </ScrollView>
 
-    <ImageButton
-        android:id="@+id/ib_register"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sv_event_info"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:src="@mipmap/ic_register_24_white" />
+        android:layout_weight="0"
+        android:weightSum="3"
+        android:padding="5dp"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/ib_register"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_below="@+id/sv_event_info"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_register_24_white" />
 
-    <ImageButton
-        android:id="@+id/ib_bookmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sv_event_info"
-        android:layout_marginRight="32dp"
-        android:paddingLeft="8dp"
-        android:layout_toLeftOf="@+id/ib_register"
-        android:background="@android:color/transparent"
-        android:src="@mipmap/ic_bookmark_border_24_white" />
+        <ImageButton
+            android:id="@+id/ib_bookmark"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sv_event_info"
+            android:layout_toLeftOf="@+id/ib_register"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_bookmark_border_24_white" />
 
-    <ImageButton
-        android:id="@+id/ib_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sv_event_info"
-        android:layout_marginLeft="32dp"
-        android:paddingRight="8dp"
-        android:layout_toRightOf="@+id/ib_register"
-        android:background="@android:color/transparent"
-        android:src="@mipmap/ic_share_24_white" />
+        <ImageButton
+            android:id="@+id/ib_share"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sv_event_info"
+            android:layout_toRightOf="@+id/ib_register"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_share_24_white" />
+    </LinearLayout>
 
 
-</RelativeLayout>
+
+</LinearLayout>
