@@ -29,12 +29,16 @@ public class Constants {
 
         public static final String SCHEDULE_URL = "http://incident.co.in/documents/EventSchedule.pdf";
         public static final String DRIVE_SCHEDULE_URL = "https://drive.google.com/file/d/0BzAWsYclHAMabENfcllSY19wUDA/view";
+        public static final String DRIVE_FAQ_URL = "https://drive.google.com/file/d/0BzAWsYclHAMaeDZyQnpIejFhaE0/view";
+        public static final String SPONSORS = "http://incident.co.in/sponsors.php";
+        public static final String PLAY_STORE = "market://details?id=in.co.inci17";
 
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
         public static final String GET_ALL_EVENTS = HOST+"get-event-details.php";
         public static final String REGISTER_EVENT = HOST+"register-event-accommodation.php";
         public static final String ATTENDING_EVENT = HOST+"attending-event.php";
+        public static final String DELETE_ATTENDING = HOST+"remove-attending-event.php";
     }
 
     public static class Keys {

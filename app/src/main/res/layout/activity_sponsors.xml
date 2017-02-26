@@ -12,13 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
+        <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            android:text="App developed by a team of final years from NITK Surathkal."
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:id="@+id/schedule_wv"/>
+
 
     </FrameLayout>
 

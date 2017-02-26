@@ -1,7 +1,9 @@
 package in.co.inci17.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -189,10 +192,10 @@ public class BaseActivity extends AppCompatActivity {
                 intent = new Intent(this, MapActivity.class);
                 break;
 
-            case R.id.item_invite:
+            /*case R.id.item_invite:
                 fragment = null;
                 intent = new Intent(this, InviteActivity.class);
-                break;
+                break;*/
 
             case R.id.item_logout:
                 fragment = null;
@@ -204,26 +207,55 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case R.id.item_faq:
                 fragment = null;
-                intent = new Intent(this, FAQActivity.class);
+                intent = new Intent(this, SponsorsActivity.class);
+                intent.putExtra("url", Constants.URLs.DRIVE_FAQ_URL);
                 break;
+
             case R.id.item_contact:
                 fragment = null;
-                Toast.makeText(getApplicationContext(), "Contact dialog box needs to be implemented.", Toast.LENGTH_SHORT).show();
-                navigationView.getMenu().getItem(7).setChecked(true);
+                //Toast.makeText(getApplicationContext(), "Contact dialog box needs to be implemented.", Toast.LENGTH_SHORT).show();
+                //navigationView.getMenu().getItem(6).setChecked(true);
+                AlertDialog.Builder contactBuilder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
+                contactBuilder.setMessage("Queries? Please contact +91 81055 63395 on WhatsApp or phone");
+                contactBuilder.setCancelable(true);
+                contactBuilder.create().show();
                 break;
             case R.id.item_rate:
                 fragment = null;
-                Toast.makeText(getApplicationContext(), "Rate dialog box needs to be implemented.", Toast.LENGTH_SHORT).show();
-                navigationView.getMenu().getItem(8).setChecked(true);
+                AlertDialog.Builder rateBuilder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
+                rateBuilder.setTitle("Rate App");
+                rateBuilder.setMessage("Liking the experience? Help us by giving a 5-star rating on the Play Store.");
+                rateBuilder.setPositiveButton("Sure!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(Constants.URLs.PLAY_STORE));
+                        startActivity(intent);
+                    }
+                });
+                rateBuilder.setNegativeButton("Maybe later", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                rateBuilder.setCancelable(true);
+                rateBuilder.create().show();
+                //navigationView.getMenu().getItem(7).setChecked(true);
                 break;
             case R.id.item_feedback:
                 fragment = null;
-                Toast.makeText(getApplicationContext(), "Feedback dialog box needs to be implemented.", Toast.LENGTH_SHORT).show();
-                navigationView.getMenu().getItem(9).setChecked(true);
+                //Toast.makeText(getApplicationContext(), "Feedback dialog box needs to be implemented.", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, SponsorsActivity.class);
+                //navigationView.getMenu().getItem(8).setChecked(true);
                 break;
             case R.id.item_about_us:
                 fragment = null;
-                intent = new Intent(this, AboutUsActivity.class);
+                //intent = new Intent(this, AboutUsActivity.class);
+                AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
+                aboutBuilder.setMessage("App developed by a team of final years from NITK");
+                aboutBuilder.setCancelable(true);
+                aboutBuilder.create().show();
+                //navigationView.getMenu().getItem(9).setChecked(true);
                 break;
 
             default:
