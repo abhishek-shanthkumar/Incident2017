@@ -213,7 +213,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
             mUpcomingViewHolder.eventID = event.getId();
             //Time and Venue
-            String time = timeFormat.format(event.getStartDateTime());
+            String time = timeFormat.format(event.getStartDateTime());//.replaceAll("\\.","");
             String loc = event.getVenue();
             //String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
             String time_venue = "Starts at " + time + " in " + loc;

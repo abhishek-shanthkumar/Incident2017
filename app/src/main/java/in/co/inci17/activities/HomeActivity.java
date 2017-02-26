@@ -89,8 +89,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             navigationView.getMenu().getItem(0).setChecked(true);
             at_home = true;
         }
-        else
+        else {
+            //getSupportActionBar().setTitle("My Events");
             navigationView.getMenu().getItem(2).setChecked(true);
+        }
 
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override
