@@ -73,9 +73,6 @@ public class BaseActivity extends AppCompatActivity {
         TextView tvName = (TextView) headerView.findViewById(R.id.tv_username);
         CircularImageView imageView = (CircularImageView) headerView.findViewById(R.id.profile_image);
         tvName.setText(user.getDisplayName());
-        TextView tvId = (TextView) headerView.findViewById(R.id.tv_user_id);
-        tvId.setText(user.getId());
-
         Picasso.with(this).load(user.getImageUrl()).into(imageView);
 
         //Unchecking all the drawer menu items before going back to home in case the app crashes
