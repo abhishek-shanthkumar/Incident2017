@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:text="App update"
+                android:textColor="@color/ColorTextHeading"
+                android:textSize="18sp"
+                android:padding="12dp"
+                android:background="@color/ColorPrimaryDark"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:background="#FFFFFF"
+        android:textColor="#000000"
+        android:alpha="0.75"
+        android:textSize="16sp"
+        android:text="We have squashed a few bugs. Please update the app to the latest version."
+        android:padding="12dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_below="@id/tv_message">
+
+        <Button
+            android:id="@+id/b_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CANCEL"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:alpha="0.87"
+            android:background="#D9D9D9"/>
+        <Button
+            android:id="@+id/b_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CONTINUE"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:alpha="0.87"
+            android:background="#b4807360"/>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -50,8 +51,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleApiClient mGoogleApiClient;
     private LoginButton facebookSigninButton;
     private CallbackManager callbackManager;
-
     SignInButton signIn_google;
+
+    LinearLayout b_google, b_facebook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +61,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
+        b_google = (LinearLayout) findViewById (R.id.container_google_signin);
+        b_facebook = (LinearLayout) findViewById (R.id.container_fb_signin);
+
         mRequestQueue = Volley.newRequestQueue(this);
         prepareGoogleSignin();
         prepareFacebookSignin();
         findViewById(R.id.google_signin_button).setOnClickListener(this);
+
+        b_google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signinWithGoogle();
+            }
+        });
+        b_facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                facebookSigninButton.performClick();
+            }
+        });
     }
 
     private void prepareFacebookSignin() {

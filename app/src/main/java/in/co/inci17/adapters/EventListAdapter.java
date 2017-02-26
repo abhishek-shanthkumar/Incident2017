@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -266,15 +267,22 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         CardView cardType;
         TextView inciTitle, year, theme;
+        ImageView bkInci;
 
         public HeaderViewHolder(View v) {
             super(v);
             inciTitle = (TextView)v.findViewById(R.id.tv_incident);
             year = (TextView)v.findViewById(R.id.tv_17);
             theme = (TextView)v.findViewById(R.id.tv_theme);
+            bkInci = (ImageView) v.findViewById(R.id.bk_inci);
             Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
             Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
             Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "Lobster_Regular.otf");
+
+            BitmapFactory.Options bm_opts = new BitmapFactory.Options();
+            bm_opts.inScaled = false;
+            Bitmap imageBM = BitmapFactory.decodeResource(v.getResources(), R.drawable.cover, bm_opts);
+            bkInci.setImageBitmap(imageBM);
 
             inciTitle.setTypeface(typeface_1);
             year.setTypeface(typeface_2);

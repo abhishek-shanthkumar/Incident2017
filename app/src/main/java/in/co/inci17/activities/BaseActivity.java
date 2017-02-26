@@ -175,7 +175,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case R.id.item_schedule:
                 fragment = null;
-                intent = new Intent(this, ScheduleActivity.class);
+                intent = new Intent(this, ScheduleActivityTemporary.class);
                 break;
             case R.id.item_bookmark:
                 fragment = null;

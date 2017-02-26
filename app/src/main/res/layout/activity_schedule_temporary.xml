@@ -34,21 +34,9 @@
                     android:id="@+id/toolbar"
                     layout="@layout/toolbar" />
 
-                <in.co.inci17.slidingtab.SlidingTabLayout
-                    android:id="@+id/tabs_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/ColorPrimary"/>
-
             </android.support.design.widget.AppBarLayout>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager_schedule"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#FFFFFF"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            <!--Include your pdf viewer xml code here.-->
 
         </android.support.design.widget.CoordinatorLayout>
 

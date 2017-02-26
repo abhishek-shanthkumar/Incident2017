@@ -22,8 +22,8 @@
     <color name="ColorTextInfo">#000000</color>
 
     <!--Tabs-->
-    <color name="ColorTabTextSelected">#FFFFFF</color>
-    <color name="ColorTabText">#AFFFFFFF</color>
+    <color name="ColorTabTextSelected">#807360</color>
+    <color name="ColorTabText">#96807360</color>
 
     <!--Key Stats/Divider-->
     <color name="ColorKeyStatContainer">#BCBCBC</color>

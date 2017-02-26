@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bk_signin"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_registration_title"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="More about You"
+        android:textColor="#807360"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif"/>
+    <View
+        android:id="@+id/view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_below="@+id/tv_registration_title"
+        android:background="@drawable/shadow" />
+
+    <ScrollView
+        android:id="@+id/sv_registration"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_shadow"
+        android:paddingBottom="56dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="24dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/container_et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_placeholder_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hi! What's your name?"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"/>
+
+                <EditText
+                    android:id="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="4dp"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_et_college_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_et_name"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_placeholder_college_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Which college do you go to?"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"/>
+
+                <HorizontalScrollView
+                    android:id="@+id/hsv_college_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded"
+                    android:scrollbars="none"
+                    android:fillViewport="false"
+                    >
+                    <EditText
+                        android:id="@+id/et_college_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minEms="300"
+                        android:layout_marginTop="4dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:clickable="true"
+                        android:maxLines="1"
+                        android:minLines="1"
+                        android:lines="1"
+                        android:hint="Click to select a college"
+                        android:padding="4dp"
+                        android:scrollHorizontally="true"
+                        android:textColor="@color/ColorTextInfo"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif"/>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_et_batch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_et_college_name"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_placeholder_batch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Which batch are you part of?"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"/>
+
+                <EditText
+                    android:id="@+id/et_batch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="4dp"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_et_specialisation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_et_batch"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_placeholder_specialisation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="What's your specialisation?"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"/>
+
+                <EditText
+                    android:id="@+id/et_specialisation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="4dp"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/b_continue_to_course_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#807360"
+        android:gravity="center"
+        android:minHeight="0dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
+        android:text="CONTINUE"
+        android:textColor="@color/ColorTextHeading"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif"/>
+
+
+</RelativeLayout>
