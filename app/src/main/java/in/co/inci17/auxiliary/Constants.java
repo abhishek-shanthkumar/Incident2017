@@ -8,8 +8,14 @@ public class Constants {
     public static final String SHARED_PREFS_FILE = "InciSharedPrefs";
     public static final String PASSPHRASE = "8d71b02e54993ac4ee2351c9804552549f1bade7";
     public static final String EVENT_STRING = "event_string";
+    public static final String QR_CODE_CONTENT = "qr_content";
     public static final String LIVE_EVENTS_CHILD = "live_events";
+    public static final String SLAM_DUNK_CHILD = "slamdunk";
+    public static final String WINNER_UNDECIDED = "undecided";
+    public static final String IN_PROGRESS = "Match in progress";
     public static final String SHOW_ONLY_MY_EVENTS = "show_mine";
+    public static final long BEFORE_MINUTES = 30;
+    public static final long ALARM_BEFORE_TIME = BEFORE_MINUTES * 60 * 1000;
 
     public static class Messages {
         public static final String NETWORK_ERROR = "Connection problem. Please try later.";
@@ -21,11 +27,18 @@ public class Constants {
     public static class URLs {
         private static final String HOST = "http://incident.co.in/api/";
 
+        public static final String SCHEDULE_URL = "http://incident.co.in/documents/EventSchedule.pdf";
+        public static final String DRIVE_SCHEDULE_URL = "https://drive.google.com/file/d/0BzAWsYclHAMabENfcllSY19wUDA/view";
+        public static final String DRIVE_FAQ_URL = "https://drive.google.com/file/d/0BzAWsYclHAMaeDZyQnpIejFhaE0/view";
+        public static final String SPONSORS = "http://incident.co.in/sponsors.php";
+        public static final String PLAY_STORE = "market://details?id=in.co.inci17";
+
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
         public static final String GET_ALL_EVENTS = HOST+"get-event-details.php";
         public static final String REGISTER_EVENT = HOST+"register-event-accommodation.php";
         public static final String ATTENDING_EVENT = HOST+"attending-event.php";
+        public static final String DELETE_ATTENDING = HOST+"remove-attending-event.php";
     }
 
     public static class Keys {

@@ -3,15 +3,17 @@ package in.co.inci17.adapters;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.graphics.Palette;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +38,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -44,17 +45,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import in.co.inci17.R;
 import in.co.inci17.activities.InEventActivity;
+import in.co.inci17.activities.QRCodeDisplayActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
+import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
 
@@ -66,7 +68,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private User user;
     private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
     private int iconWidth, iconHeight;
-    private SimpleDateFormat timeFormat;
+    private AlertDialog.Builder registrationConfirmationDialog;
+    //private SimpleDateFormat timeFormat;
 
 
     public static final int HEADER = 0;
@@ -85,7 +88,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         iconWidth = sampleIconDrawable.getIntrinsicWidth();
         iconHeight = sampleIconDrawable.getIntrinsicHeight();
 
-        timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
+        registrationConfirmationDialog = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme_Dialog));
+        registrationConfirmationDialog.setCancelable(true);
+        registrationConfirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        //timeFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
     }
 
     private synchronized void registerForEvent(final Event event) {
@@ -173,10 +184,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long delayInMillis = 5000;
-        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;
+        //Calendar now = Calendar.getInstance();
+
+        Calendar then = Calendar.getInstance();
+        then.setTime(event.getStartDateTime());
+        then.set(2017, 2, 1+Integer.parseInt(event.getDay().split(",")[0]));
+
+        /*long delayInMillis = 5000;
+        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;*/
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis() - Constants.ALARM_BEFORE_TIME, pendingIntent);
 
         event.setHasBookmarked(true);
         notifyItemChanged(events.indexOf(event)+2);
@@ -211,7 +229,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mUpcomingViewHolder.eventDescription.setText(event.getDescription());
             mUpcomingViewHolder.eventID = event.getId();
             //Time and Venue
-            String time = timeFormat.format(event.getStartDateTime());//.replaceAll("\\.","");
+            String time = Helper.timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
             String loc = event.getVenue();
             //String time_venue = "STARTS IN " + time + " hrs " + "AT " + loc;
             String time_venue = "Starts at " + time + " in " + loc;
@@ -225,6 +243,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mUpcomingViewHolder.eventDay.setText("Day " + event.getDay());
 
             mUpcomingViewHolder.eventTimeVenue.setText(modified_s);
+
+            if(event.hasRegistered())
+                mUpcomingViewHolder.register.setImageResource(R.drawable.ic_qr_code);
+            else
+                mUpcomingViewHolder.register.setImageResource(R.mipmap.ic_register_24_white);
             if(event.hasBookmarked())
                 mUpcomingViewHolder.bookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.mipmap.ic_bookmark_24_white));
             else
@@ -274,18 +297,23 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             inciTitle = (TextView)v.findViewById(R.id.tv_incident);
             year = (TextView)v.findViewById(R.id.tv_17);
             theme = (TextView)v.findViewById(R.id.tv_theme);
+
             bkInci = (ImageView) v.findViewById(R.id.bk_inci);
-            Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
             Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
-            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "Lobster_Regular.otf");
+            Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Rochester_Regular.otf");
+            Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "lobster.otf");
 
             BitmapFactory.Options bm_opts = new BitmapFactory.Options();
             bm_opts.inScaled = false;
             Bitmap imageBM = BitmapFactory.decodeResource(v.getResources(), R.drawable.cover, bm_opts);
             bkInci.setImageBitmap(imageBM);
 
+            //Typeface typeface_1 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Thin.ttf");
+            //Typeface typeface_2 = Typeface.createFromAsset(v.getContext().getAssets(), "Roboto_Light.ttf");
+            //Typeface typeface_3 = Typeface.createFromAsset(v.getContext().getAssets(), "DancingScrip_Regular.otf");
+
             inciTitle.setTypeface(typeface_1);
-            year.setTypeface(typeface_2);
+            year.setTypeface(typeface_1);
             theme.setTypeface(typeface_3);
 
         }
@@ -294,7 +322,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public class LiveViewHolder extends EventListViewHolder{
 
         RecyclerView rvLiveEvents;
-        LiveEventsListAdapter mLiveEventsListAdapter;
         TextView liveTitle;
         Context context;
         private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
@@ -308,7 +335,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             liveTitle.setTypeface(null, Typeface.BOLD);
 
             rvLiveEvents = (RecyclerView)v.findViewById(R.id.rv_live_events);
-            //mLiveEventsListAdapter = new LiveEventsListAdapter(context);
             rvLiveEvents.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
             rvLiveEvents.setItemAnimator(new DefaultItemAnimator());
             rvLiveEvents.setAdapter(mFirebaseRecyclerAdapter);
@@ -424,9 +450,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     Context bContext=view.getContext();
                     Intent intent_to_event_desc = new Intent(bContext, InEventActivity.class);
                     intent_to_event_desc.putExtra("id", eventID);
-                    Gson gson = new Gson();
+                    /*Gson gson = new Gson();
                     Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
-                    intent_to_event_desc.putExtra("events", gson.toJson(events, listOfEvents));
+                    intent_to_event_desc.putExtra("events", gson.toJson(events, listOfEvents));*/
+                    EventsManager.currentEvents = events;
                     bContext.startActivity(intent_to_event_desc);
                 }
             });
@@ -437,7 +464,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             int index = events.indexOf(new Event(eventID));
             if(index == -1)
                 return;
-            Event event = events.get(index);
+            final Event event = events.get(index);
 
             switch(v.getId()) {
 
@@ -448,8 +475,20 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 case R.id.ib_register:
                     if(!event.hasRegistered())
                     {
-                        Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
-                        registerForEvent(event);
+                        registrationConfirmationDialog.setMessage("Register for "+event.getTitle()+"?");
+                        registrationConfirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
+                                registerForEvent(event);
+                            }
+                        });
+                        registrationConfirmationDialog.create().show();
+                    }
+                    else {
+                        Intent intent = new Intent(context, QRCodeDisplayActivity.class);
+                        intent.putExtra(Constants.QR_CODE_CONTENT, user.getId()+":"+event.getId());
+                        context.startActivity(intent);
                     }
                     break;
 

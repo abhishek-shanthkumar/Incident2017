@@ -3,10 +3,12 @@ package in.co.inci17.Fragments;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +28,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import in.co.inci17.R;
+import in.co.inci17.activities.QRCodeDisplayActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomRequest;
 import in.co.inci17.auxiliary.Event;
+import in.co.inci17.auxiliary.EventsManager;
+import in.co.inci17.auxiliary.Helper;
 import in.co.inci17.auxiliary.User;
 import in.co.inci17.services.EventReminder;
 
@@ -46,12 +52,17 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
     TextView eventDescription;
     ImageView ivRegister;
     ImageView ivBookmark;
+    TextView eventDay;
+    TextView eventStartTime;
+    TextView eventVenue;
+
 
     private Context context;
     private Event event;
 
     private static User user;
     private static RequestQueue mRequestQueue;
+    private AlertDialog.Builder registrationConfirmationDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +70,16 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         context = getContext();
         if(mRequestQueue == null)
             mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        if(registrationConfirmationDialog == null) {
+            registrationConfirmationDialog = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme_Dialog));
+            registrationConfirmationDialog.setCancelable(true);
+            registrationConfirmationDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+        }
         if(user == null)
             user = User.getCurrentUser(context);
 
@@ -67,11 +88,16 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         eventDescription = (TextView) v.findViewById(R.id.tv_desc);
         ivBookmark = (ImageView) v.findViewById(R.id.ib_bookmark);
         ivRegister = (ImageView) v.findViewById(R.id.ib_register);
+        eventDay = (TextView) v.findViewById(R.id.tv_title_1);
+        eventStartTime = (TextView) v.findViewById(R.id.tv_start_time);
+        eventVenue = (TextView) v.findViewById(R.id.tv_venue);
 
         Gson gson;
         gson = new Gson();
 
-        event = gson.fromJson(getArguments().getString("event"), Event.class);
+        String eventId = getArguments().getString("eventId");
+        event = EventsManager.currentEvents.get(EventsManager.currentEvents.indexOf(new Event(eventId)));
+        //event = gson.fromJson(getArguments().getString("event"), Event.class);
 
         ivBookmark.setOnClickListener(this);
         ivRegister.setOnClickListener(this);
@@ -89,7 +115,16 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
 
         eventName.setText(event.getTitle());
         eventDescription.setText(event.getDescription());
+        eventDay.setText("Day "+event.getDay());
+        String time = Helper.timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
+        eventStartTime.setText(time);
+        eventVenue.setText(event.getVenue());
         Picasso.with(context).load(event.getImageUrl()).resize(350, 160).centerInside().into(eventImage);
+
+        if(event.hasRegistered())
+            ivRegister.setImageResource(R.drawable.ic_qr_code);
+        else
+            ivRegister.setImageResource(R.mipmap.ic_register_24_white);
 
         if(event.hasBookmarked())
             ivBookmark.setImageResource(R.mipmap.ic_bookmark_24_white); //Drawable(ContextCompat.getDrawable(context.getApplicationContext(), ));
@@ -110,8 +145,20 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
             case R.id.ib_register:
                 if(!event.hasRegistered())
                 {
-                    Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
-                    registerForEvent(event);
+                    registrationConfirmationDialog.setMessage("Register for "+event.getTitle()+"?");
+                    registrationConfirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context, "Registering for "+event.getTitle(), Toast.LENGTH_SHORT).show();
+                            registerForEvent(event);
+                        }
+                    });
+                    registrationConfirmationDialog.create().show();
+                }
+                else {
+                    Intent intent = new Intent(context, QRCodeDisplayActivity.class);
+                    intent.putExtra(Constants.QR_CODE_CONTENT, user.getId()+":"+event.getId());
+                    context.startActivity(intent);
                 }
                 break;
 
@@ -207,10 +254,17 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long delayInMillis = 5000;
-        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;
+        //Calendar now = Calendar.getInstance();
+
+        Calendar then = Calendar.getInstance();
+        then.setTime(event.getStartDateTime());
+        then.set(2017, 2, 1+Integer.parseInt(event.getDay().split(",")[0]));
+
+        /*long delayInMillis = 5000;
+        long futureInMillis = SystemClock.elapsedRealtime() + delayInMillis;*/
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, then.getTimeInMillis() - Constants.ALARM_BEFORE_TIME, pendingIntent);
 
         event.setHasBookmarked(true);
         updateView();

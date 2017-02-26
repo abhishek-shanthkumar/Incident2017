@@ -7,14 +7,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Response;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.co.inci17.Fragments.FragmentEvent;
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventPagerAdapter;
 import in.co.inci17.auxiliary.Event;
@@ -42,15 +38,17 @@ public class InEventActivity extends AppCompatActivity {
         vpEvent.setPadding(96, 192, 96, 192);
         vpEvent.setOffscreenPageLimit(3);
 
-        Gson gson = new Gson();
+        /*Gson gson = new Gson();
         Type listOfEvents = new TypeToken<List<Event>>(){}.getType();
-        events = gson.fromJson(getIntent().getStringExtra("events"), listOfEvents);
+        events = gson.fromJson(getIntent().getStringExtra("events"), listOfEvents);*/
+
+        events = EventsManager.currentEvents;
 
         if(events == null) {
             EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
                 @Override
                 public void onResponse(List<Event> response) {
-                    events = response;
+                    events = new ArrayList<>(response);
                     //vpEvent.getAdapter().notifyDataSetChanged();
                     vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
                     vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
@@ -63,7 +61,9 @@ public class InEventActivity extends AppCompatActivity {
             vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
         }
 
-        //vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
+        vpEvent.setBackgroundColor(Color.parseColor("#535454"));
+
+        /*//vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
         vpEvent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -118,7 +118,13 @@ public class InEventActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventsManager.currentEvents = null;
     }
 }
 

@@ -1,16 +1,19 @@
 package in.co.inci17.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.TypefaceSpan;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -20,12 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
 import in.co.inci17.R;
 import in.co.inci17.adapters.EventListAdapter;
-import in.co.inci17.adapters.LiveEventsListAdapter;
 import in.co.inci17.adapters.SlamDunkMatchesAdapter;
 import in.co.inci17.adapters.ViewPagerAdapterLeaderboard;
 import in.co.inci17.auxiliary.BottomFadeEdgeRV;
@@ -33,6 +36,7 @@ import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.CustomTypefaceSpan;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
+import in.co.inci17.auxiliary.SlamdunkMatch;
 import in.co.inci17.auxiliary.User;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
@@ -53,11 +57,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private boolean onlyShowMyEvents = false;
 
-    private List<Event> events;
+    private List<Event> allEvents;
+    private List<Event> adapterEvents;
 
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>
+    private FirebaseRecyclerAdapter<Event, LiveEventsViewHolder>
             mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<SlamdunkMatch, SlamDunkMatchesAdapter.SlamDunkMatchViewHolder> mSlamDunkFirebaseAdapter;
 
     TextView tvSlamDunk;
 
@@ -67,6 +73,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         //Font declarations
         tf_RobotoSlabBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoSlab_Bold.ttf");
@@ -88,21 +96,23 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         else {
             //getSupportActionBar().setTitle("My Events");
+            ((TextView) findViewById(R.id.tv_title)).setText("Bookmarks");
             navigationView.getMenu().getItem(2).setChecked(true);
         }
 
         EventsManager.getAllEvents(this, new Response.Listener<List<Event>>() {
             @Override
             public void onResponse(List<Event> response) {
-                events = new ArrayList<>(response);
+                allEvents = new ArrayList<>(response);
+                adapterEvents = new ArrayList<>();
                 if(onlyShowMyEvents) {
-                    Event event;
-                    for (int i=0; i<events.size(); i++) {
-                        event = events.get(i);
-                        if(!event.hasBookmarked() || !event.hasRegistered())
-                            events.remove(i);
-                    }
+                    for(Event event : allEvents)
+                        if(event.hasRegistered() || event.hasBookmarked())
+                            adapterEvents.add(event);
                 }
+                else
+                    adapterEvents.addAll(allEvents);
+
                 //mEventListAdapter.notifyDataSetChanged();
                 setupRecyclerView();
             }
@@ -145,7 +155,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         setupLiveEvents();
 
         rvEvents = (RecyclerView)findViewById(R.id.rv_events);
-        mEventListAdapter = new EventListAdapter(getApplicationContext(), events, mFirebaseAdapter);
+        mEventListAdapter = new EventListAdapter(this, adapterEvents, mFirebaseAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setItemAnimator(new DefaultItemAnimator());
         rvEvents.setAdapter(mEventListAdapter);
@@ -155,29 +165,57 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private void setupMatchesRecyclerView() {
         //RecyclerView set-up
 //        setupLiveEvents();
+        mSlamDunkFirebaseAdapter = new FirebaseRecyclerAdapter<SlamdunkMatch, SlamDunkMatchesAdapter.SlamDunkMatchViewHolder>(
+                SlamdunkMatch.class,
+                R.layout.card_layout_slamdunk_scorecard,
+                SlamDunkMatchesAdapter.SlamDunkMatchViewHolder.class,
+                mFirebaseDatabaseReference.child(Constants.SLAM_DUNK_CHILD)
+        ) {
+            @Override
+            protected void populateViewHolder(SlamDunkMatchesAdapter.SlamDunkMatchViewHolder viewHolder, SlamdunkMatch match, int position) {
+                viewHolder.team_name_1.setText(match.getTeamA());
+                viewHolder.team_name_2.setText(match.getTeamB());
+                viewHolder.team_score_1.setText(match.getScoreA());
+                viewHolder.team_score_2.setText(match.getScoreB());
+                viewHolder.quarter.setText(match.getQuarter());
+                if(match.getWinner().equals(Constants.WINNER_UNDECIDED))
+                    viewHolder.match_review.setText(Constants.IN_PROGRESS);
+                else
+                    viewHolder.match_review.setText("Winner: "+match.getWinner());
+            }
+        };
         mSlamDunkMatches = (BottomFadeEdgeRV) findViewById(R.id.rv_slamdunk);
 
         mLayoutManager = new LinearLayoutManager(this);
-        mSlamDunkMatchesAdapter = new SlamDunkMatchesAdapter(getApplicationContext());
+        //mSlamDunkMatchesAdapter = new SlamDunkMatchesAdapter(getApplicationContext());
         mSlamDunkMatches.setLayoutManager(mLayoutManager);
         mSlamDunkMatches.setItemAnimator(new DefaultItemAnimator());
-        mSlamDunkMatches.setAdapter(mSlamDunkMatchesAdapter);
+        mSlamDunkMatches.setAdapter(mSlamDunkFirebaseAdapter);
     }
 
     private void setupLiveEvents() {
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Event, LiveEventsListAdapter.LiveEventsViewHolder>(
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Event, LiveEventsViewHolder>(
                 Event.class,
                 R.layout.card_layout_live,
-                LiveEventsListAdapter.LiveEventsViewHolder.class,
+                LiveEventsViewHolder.class,
                 mFirebaseDatabaseReference.child(Constants.LIVE_EVENTS_CHILD)
         ) {
             @Override
-            protected void populateViewHolder(LiveEventsListAdapter.LiveEventsViewHolder viewHolder, Event event, int position) {
-                Event thisEvent = events.get(events.indexOf(event));
+            protected void populateViewHolder(LiveEventsViewHolder viewHolder, Event event, int position) {
+                final Event thisEvent = allEvents.get(allEvents.indexOf(event));
                 viewHolder.liveEventTitle.setText(thisEvent.getTitle());
                 Picasso.with(HomeActivity.this).load(thisEvent.getIconUrl()).into(viewHolder.icon);
                 viewHolder.eventID = event.getId();
+                final Context context = HomeActivity.this;
+                viewHolder.cardType.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent_to_event_desc = new Intent(context, InEventActivity.class);
+                        intent_to_event_desc.putExtra("id", thisEvent.getId());
+                        EventsManager.currentEvents = allEvents;
+                        context.startActivity(intent_to_event_desc);
+                    }
+                });
             }
         };
     }
@@ -202,5 +240,49 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         if(mEventListAdapter != null)
             mEventListAdapter.notifyDataSetChanged();
+    }
+
+    public static class LiveEventsViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/{
+
+        CardView cardType;
+        public TextView liveEventTitle;
+        public ImageView icon;
+        public String eventID;
+        private Context context;
+
+        public LiveEventsViewHolder(View v) {
+            super(v);
+            cardType = (CardView) v.findViewById (R.id.cv_live);
+            liveEventTitle = (TextView) v.findViewById (R.id.tv_live_event_title);
+            icon = (ImageView) v.findViewById(R.id.event_icon);
+            //TextView Marquee
+            liveEventTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            liveEventTitle.setSingleLine(true);
+            liveEventTitle.setMarqueeRepeatLimit(1);
+            liveEventTitle.setSelected(true);
+            //context = HomeActivity.this;
+            //cardType.setOnClickListener(this);
+        }
+
+        /*@Override
+        public void onClick(View view) {
+            Intent intent_to_event_desc = new Intent(context, InEventActivity.class);
+            intent_to_event_desc.putExtra("id", eventID);
+            EventsManager.currentEvents = allEvents;
+            context.startActivity(intent_to_event_desc);
+        }*/
+    }
+
+    //Functon for getting searched Events
+    protected List<Event> getSearchedEvents(String keyword){
+        keyword=keyword.toLowerCase();
+        List<Event> matchedEvents=null;
+        for(Event event : adapterEvents){
+            if(event.getTitle().contains(keyword) || (event.getSubtitle().contains(keyword) || (event.getDescription().contains(keyword))))
+            {
+                matchedEvents.add(event);
+            }
+        }
+        return matchedEvents;
     }
 }

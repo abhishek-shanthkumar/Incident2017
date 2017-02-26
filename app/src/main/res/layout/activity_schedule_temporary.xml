@@ -36,7 +36,10 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <!--Include your pdf viewer xml code here.-->
+            <WebView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/schedule_wv"/>
 
         </android.support.design.widget.CoordinatorLayout>
 

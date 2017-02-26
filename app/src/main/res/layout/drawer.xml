@@ -37,12 +37,12 @@
     <group
         android:id="@+id/mid_part"
         android:checkableBehavior="single">
-
+<!--
         <item
             android:id="@+id/item_invite"
             android:checked="false"
             android:icon="@mipmap/ic_invite_24_black"
-            android:title="Invite" />
+            android:title="Invite" />-->
 
 
         <item
@@ -76,7 +76,7 @@
         <item
             android:id="@+id/item_feedback"
             android:checked="false"
-            android:title="Feedback" />
+            android:title="Sponsors" />
 
         <item
             android:id="@+id/item_about_us"

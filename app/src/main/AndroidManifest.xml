@@ -82,6 +82,10 @@
 
         <activity android:name=".activities.MoreInfoActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.QRCodeDisplayActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"></activity>
+        <activity android:name=".activities.SponsorsActivity"></activity>
     </application>
 
 </manifest>

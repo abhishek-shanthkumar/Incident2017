@@ -31,6 +31,7 @@ public class EventsManager {
     private static boolean fetchingEvents = false;
     private static User user;
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.UK);
+    public static List<Event> currentEvents;
 
     public synchronized static void getAllEvents(Context context, Response.Listener<List<Event>> listener) {
         if(user == null)
@@ -103,7 +104,9 @@ public class EventsManager {
                             public int compare(Event e1, Event e2) {
                                 String e1Day = e1.getDay().split(",")[0];
                                 String e2Day = e2.getDay().split(",")[0];
-                                return e1Day.compareTo(e2Day);
+                                if(!e1Day.equals(e2Day))
+                                    return e1Day.compareTo(e2Day);
+                                return e1.getStartDateTime().compareTo(e2.getStartDateTime());
                             }
                         });
                         for(Response.Listener<List<Event>> listener : listeners)
