@@ -9,6 +9,9 @@ public class Constants {
     public static final String PASSPHRASE = "8d71b02e54993ac4ee2351c9804552549f1bade7";
     public static final String EVENT_STRING = "event_string";
     public static final String LIVE_EVENTS_CHILD = "live_events";
+    public static final String SLAM_DUNK_CHILD = "slamdunk";
+    public static final String WINNER_UNDECIDED = "undecided";
+    public static final String IN_PROGRESS = "Match in progress";
     public static final String SHOW_ONLY_MY_EVENTS = "show_mine";
 
     public static class Messages {

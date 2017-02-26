@@ -40,12 +40,12 @@ public class SlamDunkMatchesAdapter extends
         return new SlamDunkMatchViewHolder(itemView);
     }
 
-    public class SlamDunkMatchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class SlamDunkMatchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        CardView cardType;
-        TextView team_name_1, team_name_2;
-        TextView team_score_1, team_score_2;
-        TextView quarter, match_review;
+        public CardView cardType;
+        public TextView team_name_1, team_name_2;
+        public TextView team_score_1, team_score_2;
+        public TextView quarter, match_review;
         Typeface typeface_scoreboard;
 
         public SlamDunkMatchViewHolder(View v) {
