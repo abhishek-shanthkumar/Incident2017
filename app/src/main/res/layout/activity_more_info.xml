@@ -108,6 +108,7 @@
                         android:scrollHorizontally="true"
                         android:textColor="@color/ColorTextInfo"
                         android:textSize="18sp"
+                        android:maxLength="55"
                         android:fontFamily="sans-serif"/>
                 </HorizontalScrollView>
             </LinearLayout>
@@ -140,6 +141,7 @@
                     android:padding="4dp"
                     android:textColor="@color/ColorTextInfo"
                     android:textSize="18sp"
+                    android:maxLength="48"
                     android:fontFamily="sans-serif"/>
             </LinearLayout>
 
@@ -170,6 +172,8 @@
                     android:maxLines="1"
                     android:padding="4dp"
                     android:textColor="@color/ColorTextInfo"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif"/>
             </LinearLayout>
@@ -203,6 +207,7 @@
                     android:textColor="@color/ColorTextInfo"
                     android:textSize="18sp"
                     android:inputType="phone"
+                    android:maxLength="13"
                     android:fontFamily="sans-serif"/>
             </LinearLayout>
 
