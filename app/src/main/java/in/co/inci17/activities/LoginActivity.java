@@ -31,6 +31,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -218,7 +219,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         user.setDisplayName(account.getDisplayName());
         user.setEmail(account.getEmail());
         //noinspection ConstantConditions
-        user.setImageUrl(account.getPhotoUrl().toString());
+        if(account.getPhotoUrl()!=null)
+            user.setImageUrl(account.getPhotoUrl().toString());
         authenticateUserWithServer(user);
     }
 
@@ -267,6 +269,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void userAlreadyRegistered(User user, String accountID) {
         user.setId(accountID);
+        if(user.getImageUrl() == null)
+            user.setImageUrl(Constants.URLs.PLACEHOLDER_IMAGE);
         User.updateUser(user, this);
 
         Intent intent = new Intent(this, HomeActivity.class);
@@ -275,9 +279,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void registerUser(User user) {
-        Toast.makeText(this, "Need additional info!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Sorry, you need to register on the website.", Toast.LENGTH_SHORT).show();
+        if(user.getImageUrl() == null)
+            user.setImageUrl(Constants.URLs.PLACEHOLDER_IMAGE);
 
-        //TODO Show view where user can enter other details and send the details to server
+        Gson gson = new Gson();
+        Intent intent = new Intent(this, MoreInfoActivity.class);
+        intent.putExtra("user", gson.toJson(user));
+        startActivity(intent);
+        this.finish();
     }
 
     @Override

@@ -32,6 +32,7 @@ public class Constants {
         public static final String DRIVE_FAQ_URL = "https://drive.google.com/file/d/0BzAWsYclHAMaeDZyQnpIejFhaE0/view";
         public static final String SPONSORS = "http://incident.co.in/sponsors.php";
         public static final String PLAY_STORE = "market://details?id=in.co.inci17";
+        public static final String PLACEHOLDER_IMAGE = "http://eadb.org/wp-content/uploads/2015/08/profile-placeholder.jpg";
 
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
@@ -63,6 +64,15 @@ public class Constants {
         public static final String EVENT_DAY = "day";
         public static final String EVENT_START_TIME = "start_time";
         public static final String EVENT_END_TIME = "end_time";
+        public static final String ACCOUNT_SIGNI_IN = "Sign_In";
+        public static final String ACCOUNT_REG_ID = "Id";
+        public static final String ACCOUNT_NAME = "Full_Name";
+        public static final String ACCOUNT_EMAIL = "Email";
+        public static final String ACCOUNT_COLLEGE = "College";
+        public static final String ACCOUNT_MOBILE = "Mobile_Number";
+        public static final String ACCOUNT_DEGREE = "Degree";
+        public static final String ACCOUNT_YEAR = "Year_Of_Study";
+        public static final String ACCOUNT_IMAGE = "Image_Url";
         public static final String OUTPUT = "output";
 
     }

@@ -27,7 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/ColorRecyclerBackground"
+        android:background="#FFFFFF"
+        app:itemBackground="@drawable/bk_drawable_item"
         app:itemIconTint="@color/selector_drawer_item"
         app:itemTextColor="@color/selector_drawer_item"
         app:menu="@layout/drawer" />

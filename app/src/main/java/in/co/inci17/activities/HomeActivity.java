@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +36,6 @@ import in.co.inci17.auxiliary.CustomTypefaceSpan;
 import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
 import in.co.inci17.auxiliary.SlamdunkMatch;
-import in.co.inci17.auxiliary.User;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
@@ -80,11 +78,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         tf_RobotoSlabBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoSlab_Bold.ttf");
         tf_RobotoLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "Roboto_Light.ttf");
 
-        if ((User.getCurrentUser(this)) == null) {
+        /*if ((User.getCurrentUser(this)) == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             this.finish();
-        }
+        }*/
 
         onlyShowMyEvents = getIntent().getBooleanExtra(Constants.SHOW_ONLY_MY_EVENTS, false);
 

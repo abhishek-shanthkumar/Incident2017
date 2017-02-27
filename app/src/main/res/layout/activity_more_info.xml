@@ -124,7 +124,7 @@
                     android:id="@+id/tv_placeholder_batch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Which batch are you part of?"
+                    android:text="Which course are you pursuing?"
                     android:textColor="@color/ColorTextInfo"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-light"/>
@@ -155,7 +155,7 @@
                     android:id="@+id/tv_placeholder_specialisation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="What's your specialisation?"
+                    android:text="What's your year of study?"
                     android:textColor="@color/ColorTextInfo"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-light"/>
@@ -171,6 +171,38 @@
                     android:padding="4dp"
                     android:textColor="@color/ColorTextInfo"
                     android:textSize="18sp"
+                    android:fontFamily="sans-serif"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_et_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_et_specialisation"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your mobile number"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"/>
+
+                <EditText
+                    android:id="@+id/et_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="4dp"
+                    android:textColor="@color/ColorTextInfo"
+                    android:textSize="18sp"
+                    android:inputType="phone"
                     android:fontFamily="sans-serif"/>
             </LinearLayout>
 

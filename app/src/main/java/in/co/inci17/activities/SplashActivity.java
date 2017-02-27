@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
 
-        timer.start();
+        //timer.start();
 
         UpdateRequestDialog updateRequestDialog = new UpdateRequestDialog(this);
         Window window = updateRequestDialog.getWindow();

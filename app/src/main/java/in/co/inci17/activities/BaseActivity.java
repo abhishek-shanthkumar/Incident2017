@@ -52,8 +52,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if ((user = User.getCurrentUser(this)) == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);*/
             this.finish();
         }
     }
@@ -203,6 +203,8 @@ public class BaseActivity extends AppCompatActivity {
                 //Auth.GoogleSignInApi.revokeAccess(user.getmGoogleApiClient());
                 User.deleteUser(this);
                 intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
                 //navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.item_faq:
