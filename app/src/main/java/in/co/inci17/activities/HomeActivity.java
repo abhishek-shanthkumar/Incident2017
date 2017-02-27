@@ -37,7 +37,7 @@ import in.co.inci17.auxiliary.Event;
 import in.co.inci17.auxiliary.EventsManager;
 import in.co.inci17.auxiliary.SlamdunkMatch;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomeActivity extends BaseActivity {
 
     private SlidingUpPanelLayout mSlidingLayout;
 
@@ -45,7 +45,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     BottomFadeEdgeRV mSlamDunkMatches;
 
     EventListAdapter mEventListAdapter;
-    SlamDunkMatchesAdapter mSlamDunkMatchesAdapter;
 
     LinearLayoutManager mLayoutManager;
 
@@ -219,13 +218,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if (mSlidingLayout != null &&
                 (mSlidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED || mSlidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
@@ -272,7 +264,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     //Functon for getting searched Events
-    protected List<Event> getSearchedEvents(String keyword){
+    /*protected List<Event> getSearchedEvents(String keyword){
         keyword=keyword.toLowerCase();
         List<Event> matchedEvents=null;
         for(Event event : adapterEvents){
@@ -282,5 +274,5 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         return matchedEvents;
-    }
+    }*/
 }

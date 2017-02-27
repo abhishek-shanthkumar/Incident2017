@@ -277,7 +277,7 @@ public class BaseActivity extends AppCompatActivity {
 
         drawerLayout.closeDrawers();
 
-        if (fragment != null) {
+//        if (fragment != null) {
 
 //            Fragment temp  = getSupportFragmentManager().findFragmentById(R.id.frame);
 //
@@ -297,7 +297,7 @@ public class BaseActivity extends AppCompatActivity {
 //                }
 //            }
 
-        }
+//        }
     }
 
     public void runWhenIdle(Runnable runnable) {

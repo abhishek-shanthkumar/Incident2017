@@ -1,6 +1,5 @@
 package in.co.inci17.activities;
 
-import android.animation.ArgbEvaluator;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -22,8 +21,8 @@ public class InEventActivity extends AppCompatActivity {
     List<Event> events;
     List<String> updatedEventIds;
 
-    Integer[] colors = {Color.parseColor("#322426"), Color.parseColor("#2A2865"), Color.parseColor("#322426"), Color.parseColor("#2A2865")};
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    //Integer[] colors = {Color.parseColor("#322426"), Color.parseColor("#2A2865"), Color.parseColor("#322426"), Color.parseColor("#2A2865")};
+    //ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

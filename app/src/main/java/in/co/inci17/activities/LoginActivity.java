@@ -20,7 +20,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -29,7 +28,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
@@ -47,12 +45,12 @@ import in.co.inci17.auxiliary.User;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 812;
-    private final String TAG = "MainActivity";
+    private final String TAG = "LoginActivity";
     private RequestQueue mRequestQueue;
     private GoogleApiClient mGoogleApiClient;
     private LoginButton facebookSigninButton;
     private CallbackManager callbackManager;
-    SignInButton signIn_google;
+    //SignInButton signIn_google;
 
     LinearLayout b_google, b_facebook;
 
@@ -179,13 +177,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            String email = acct.getEmail();
-            if(email==null || email.isEmpty()) {
-                Toast.makeText(this, Constants.Messages.EMAIL_NEEDED, Toast.LENGTH_SHORT).show();
-                Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient);
-                return;
+            if(acct != null) {
+                String email = acct.getEmail();
+                if (email == null || email.isEmpty()) {
+                    Toast.makeText(this, Constants.Messages.EMAIL_NEEDED, Toast.LENGTH_SHORT).show();
+                    Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient);
+                    return;
+                }
+                createUser(acct);
             }
-            createUser(acct);
+            else
+                handleSigninError();
         } else {
             // Signed out, show unauthenticated UI.
             handleSigninError();
@@ -197,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void createUser(JSONObject object) {
-        Profile profile = Profile.getCurrentProfile();
+        //Profile profile = Profile.getCurrentProfile();
         User user = new User();
         //user.setDisplayName(profile.getName());
         try {

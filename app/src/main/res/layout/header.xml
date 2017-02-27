@@ -15,7 +15,6 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
-        android:src="@drawable/ic_profile_48_white"
         app:border_color="#96d82b42"
         app:border_overlay="false"
         app:border_width="2dp" />

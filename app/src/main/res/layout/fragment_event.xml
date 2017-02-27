@@ -38,8 +38,7 @@
                 android:background="#FFFFFF"
                 android:paddingLeft="-2dp"
                 android:paddingRight="-2dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/raghu" />
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:id="@+id/container_event_info"
