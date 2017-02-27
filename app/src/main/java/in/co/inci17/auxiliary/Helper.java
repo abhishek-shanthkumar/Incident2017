@@ -51,7 +51,7 @@ public class Helper {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         String time = Helper.timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey, check out "+event.getTitle()+" starting at "+time+ " in "+event.getVenue()+"!");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey, check out "+event.getTitle()+" starting at "+time+ ", March " + (Integer.parseInt(event.getDay().split(",")[0])+1) + " in "+event.getVenue()+"!");
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, context.getResources().getText(R.string.send_to)));
     }
