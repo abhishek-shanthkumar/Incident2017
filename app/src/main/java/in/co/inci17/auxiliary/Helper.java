@@ -3,6 +3,8 @@ package in.co.inci17.auxiliary;
  * Created by Abhishek on 19-01-2017.
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -13,6 +15,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import in.co.inci17.R;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -41,5 +45,14 @@ public class Helper {
             Log.e("QR Generator", e.getLocalizedMessage());
             return null;
         }
+    }
+
+    public static void shareEvent(Context context, Event event) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        String time = Helper.timeFormat.format(event.getStartDateTime()).replaceAll("\\.","");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey, check out "+event.getTitle()+" starting at "+time+ " in "+event.getVenue()+"!");
+        sendIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(sendIntent, context.getResources().getText(R.string.send_to)));
     }
 }

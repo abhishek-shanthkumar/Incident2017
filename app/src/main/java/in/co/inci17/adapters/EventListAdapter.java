@@ -393,6 +393,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 }
             });*/
 
+            v.findViewById(R.id.ib_share).setOnClickListener(this);
             register = (ImageButton) v.findViewById(R.id.ib_register);
             register.setOnClickListener(this);
             bookmark = (ImageButton) v.findViewById(R.id.ib_bookmark);
@@ -495,6 +496,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 case R.id.ib_bookmark:
                     if(!event.hasBookmarked())
                         markEventAsAttending(event);
+                    break;
+
+                case R.id.ib_share:
+                    Helper.shareEvent(context, event);
                     break;
             }
         }

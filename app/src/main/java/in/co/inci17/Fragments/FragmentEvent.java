@@ -91,6 +91,7 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         eventDay = (TextView) v.findViewById(R.id.tv_title_1);
         eventStartTime = (TextView) v.findViewById(R.id.tv_start_time);
         eventVenue = (TextView) v.findViewById(R.id.tv_venue);
+        v.findViewById(R.id.ib_share).setOnClickListener(this);
 
         Gson gson;
         gson = new Gson();
@@ -165,6 +166,10 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
             case R.id.ib_bookmark:
                 if(!event.hasBookmarked())
                     markEventAsAttending(event);
+                break;
+
+            case R.id.ib_share:
+                Helper.shareEvent(context, event);
                 break;
         }
     }
