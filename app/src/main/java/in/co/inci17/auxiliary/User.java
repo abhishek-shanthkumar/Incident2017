@@ -18,6 +18,15 @@ public class User {
     private String displayName;
     private String email;
     private String imageUrl;
+    private String uniqueId;
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 
     public String getId() {
         return id;

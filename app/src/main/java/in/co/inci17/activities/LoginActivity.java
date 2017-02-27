@@ -106,15 +106,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    private void continueFacebookSignin(LoginResult loginResult) {
+    private void continueFacebookSignin(final LoginResult loginResult) {
         Log.d("Facebook Signin", "Sending graph request");
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        if(object.has("email"))
-                            createUser(object);
+                        if(object.has("email")) {
+                            try {
+                                object.put("unique_id", loginResult.getAccessToken().getUserId());
+                                createUser(object);
+                            } catch (JSONException e) {
+                                Log.e("JSONError", e.getLocalizedMessage());
+                            }
+                        }
                         else {
                             Toast.makeText(LoginActivity.this, Constants.Messages.EMAIL_NEEDED, Toast.LENGTH_SHORT).show();
                             LoginManager.getInstance().logOut();
@@ -205,6 +211,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             user.setDisplayName(object.getString("name"));
             user.setEmail(object.getString("email"));
+            user.setUniqueId(object.getString("unique_id"));
             //Log.d("Facebook", object.toString());
             user.setImageUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
             //user.setImageUrl(profile.getProfilePictureUri(500, 500).toString());
@@ -220,6 +227,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         User user = new User();
         user.setDisplayName(account.getDisplayName());
         user.setEmail(account.getEmail());
+        user.setUniqueId(account.getId());
         //noinspection ConstantConditions
         if(account.getPhotoUrl()!=null)
             user.setImageUrl(account.getPhotoUrl().toString());

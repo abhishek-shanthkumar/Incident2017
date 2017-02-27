@@ -86,7 +86,8 @@ public class MoreInfoActivity extends Activity implements View.OnClickListener{
 
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.Keys.ACCOUNT_SIGNI_IN, "1'");
-        params.put(Constants.Keys.ACCOUNT_REG_ID, "dojfhsadfbkfbh");
+        //Log.d("Unique id", user.getUniqueId());
+        params.put(Constants.Keys.ACCOUNT_REG_ID, user.getUniqueId());
         params.put(Constants.Keys.ACCOUNT_NAME, user.getDisplayName());
         params.put(Constants.Keys.ACCOUNT_EMAIL, user.getEmail());
         params.put(Constants.Keys.ACCOUNT_COLLEGE, college.getText().toString());
