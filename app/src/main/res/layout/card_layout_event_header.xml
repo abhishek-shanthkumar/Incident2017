@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:alpha="0.5"/>
+            android:alpha="1"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"

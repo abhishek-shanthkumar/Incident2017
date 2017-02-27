@@ -174,7 +174,7 @@ public class HomeActivity extends BaseActivity {
                 viewHolder.team_name_2.setText(match.getTeamB());
                 viewHolder.team_score_1.setText(match.getScoreA());
                 viewHolder.team_score_2.setText(match.getScoreB());
-                viewHolder.quarter.setText(match.getQuarter());
+                viewHolder.quarter.setText("QTR\n"+match.getQuarter());
                 if(match.getWinner().equals(Constants.WINNER_UNDECIDED))
                     viewHolder.match_review.setText(Constants.IN_PROGRESS);
                 else

@@ -64,7 +64,7 @@ public class SlamDunkMatchesAdapter extends
 
             team_score_1.setTypeface(typeface_scoreboard);
             team_score_2.setTypeface(typeface_scoreboard);
-            quarter.setTypeface(typeface_scoreboard);
+            //quarter.setTypeface(typeface_scoreboard);
 
             cardType.setOnClickListener(this);
         }

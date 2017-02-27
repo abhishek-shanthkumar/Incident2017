@@ -11,25 +11,29 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_slamdunk"
-        android:layout_width="240dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:orientation="vertical"
         card_view:cardBackgroundColor="@android:color/transparent"
-        card_view:cardCornerRadius="3dp">
+        card_view:cardCornerRadius="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:background="#303030"
+            android:gravity="center">
 
             <RelativeLayout
                 android:id="@+id/container_team1"
                 android:layout_width="120dp"
-                android:layout_height="160dp"
-                android:background="#807360">
+                android:layout_height="120dp"
+                android:background="#303030">
 
                 <TextView
                     android:id="@+id/tv_name_team1"
@@ -51,21 +55,15 @@
                     android:text="22"
                     android:textColor="#FFFFFF"
                     android:textSize="50sp" />
-            </RelativeLayout>
 
-            <View
-                android:id="@+id/divider_1"
-                android:layout_width="2dp"
-                android:layout_height="180dp"
-                android:layout_toRightOf="@+id/container_team1"
-                android:background="#FFFFFF" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/container_team2"
                 android:layout_width="120dp"
-                android:layout_height="160dp"
-                android:layout_toRightOf="@+id/divider_1"
-                android:background="#807360">
+                android:layout_height="120dp"
+                android:layout_toRightOf="@+id/container_team1"
+                android:background="#303030">
 
                 <TextView
                     android:id="@+id/tv_name_team2"
@@ -87,48 +85,31 @@
                     android:text="20"
                     android:textColor="#FFFFFF"
                     android:textSize="50sp" />
+
             </RelativeLayout>
-
-            <TextView
-                android:id="@+id/tv_quarter_title"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/container_team1"
-                android:background="#FFFFFF"
-                android:gravity="center"
-                android:paddingBottom="4dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp"
-                android:text="QUARTER"
-                android:textColor="#96000000"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_quarter"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_quarter_title"
-                android:background="#FFFFFF"
-                android:gravity="center"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="03"
-                android:textColor="#000000"
-                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/tv_match_result"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_quarter"
-                android:background="#F2F2F2"
+                android:layout_below="@+id/container_team1"
+                android:background="#32FFFFFF"
                 android:gravity="center"
                 android:padding="12dp"
                 android:text="GAME IN PROGRESS"
-                android:textColor="#afd82b42"
-                android:textSize="18sp" />
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_quarter"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="QTR\n03"
+                android:textColor="#AAFFFFFF"
+                android:background="#303030"
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
