@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:tint="#807360"
+            android:tint="@color/ColorAccent"
             android:src="@mipmap/ic_menu_24" />
 
         <LinearLayout
@@ -86,6 +86,7 @@
             android:background="@android:color/transparent"
             android:padding="@dimen/activity_vertical_margin"
             android:tint="#807360"
+            android:visibility="gone"
             android:src="@mipmap/ic_search_24" />
 
         <ImageButton
@@ -94,6 +95,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:tint="#807360"
+            android:visibility="gone"
             android:background="@android:color/transparent"
             android:src="@mipmap/ic_notifications_none_24" />
     </RelativeLayout>
