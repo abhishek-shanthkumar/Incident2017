@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bk_event_info"
     android:orientation="vertical"
-    android:padding="3dp">
+    android:padding="0dp">
 
     <TextView
         android:id="@+id/tv_event_name"
@@ -14,15 +14,14 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="TANDAV"
-        android:background="@drawable/bk_event_title"
-        android:textColor="#000000"
+        android:background="#24FFFFFF"
+        android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
     <ScrollView
         android:id="@+id/sv_event_info"
         android:layout_below="@+id/tv_event_name"
         android:layout_width="match_parent"
-        android:background="#EAEBEC"
         android:layout_weight="1"
         android:layout_height="match_parent">
 
@@ -61,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:alpha="0.5"
                         android:text="Day 1"
-                        android:textColor="#000000"
+                        android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
                     <TextView
@@ -70,9 +69,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@+id/tv_title_1"
                         android:layout_below="@+id/tv_title_1"
-                        android:alpha="0.87"
+                        android:alpha="0.6"
                         android:text="4:30 hrs"
-                        android:textColor="#000000"
+                        android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
                 </RelativeLayout>
@@ -82,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:alpha="0.20"
-                    android:background="#000000" />
+                    android:background="#FFFFFF" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -97,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:alpha="0.5"
                         android:text="At"
-                        android:textColor="#000000"
+                        android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
                     <TextView
@@ -106,9 +105,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@+id/tv_title_2"
                         android:layout_below="@+id/tv_title_2"
-                        android:alpha="0.87"
+                        android:alpha="0.6"
                         android:text="Main Building"
-                        android:textColor="#000000"
+                        android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
                 </RelativeLayout>
@@ -128,10 +127,10 @@
                 android:id="@+id/tv_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.75"
+                android:alpha="0.6"
                 android:padding="16dp"
                 android:text="Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -142,7 +141,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:weightSum="3"
-        android:padding="5dp"
+        android:padding="10dp"
+        android:background="#24FFFFFF"
         android:orientation="horizontal">
 
         <ImageButton

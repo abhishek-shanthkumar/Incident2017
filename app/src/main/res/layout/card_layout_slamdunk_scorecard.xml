@@ -31,7 +31,7 @@
 
             <RelativeLayout
                 android:id="@+id/container_team1"
-                android:layout_width="120dp"
+                android:layout_width="150dp"
                 android:layout_height="120dp"
                 android:background="#303030">
 
@@ -60,7 +60,7 @@
 
             <RelativeLayout
                 android:id="@+id/container_team2"
-                android:layout_width="120dp"
+                android:layout_width="150dp"
                 android:layout_height="120dp"
                 android:layout_toRightOf="@+id/container_team1"
                 android:background="#303030">
@@ -90,14 +90,14 @@
 
             <TextView
                 android:id="@+id/tv_match_result"
-                android:layout_width="240dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/container_team1"
                 android:background="#32FFFFFF"
                 android:gravity="center"
                 android:padding="12dp"
                 android:text="GAME IN PROGRESS"
-                android:textSize="13sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_quarter"

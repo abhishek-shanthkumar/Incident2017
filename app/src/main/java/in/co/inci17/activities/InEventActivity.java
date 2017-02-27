@@ -1,7 +1,7 @@
 package in.co.inci17.activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -60,7 +60,7 @@ public class InEventActivity extends AppCompatActivity {
             vpEvent.setCurrentItem(events.indexOf(new Event(getIntent().getStringExtra("id"))));
         }
 
-        vpEvent.setBackgroundColor(Color.parseColor("#535454"));
+        vpEvent.setBackgroundColor(ContextCompat.getColor(this, R.color.ColorPrimary));
 
         /*//vpEvent.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), events));
         vpEvent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
