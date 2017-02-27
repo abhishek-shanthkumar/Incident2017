@@ -166,6 +166,8 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
             case R.id.ib_bookmark:
                 if(!event.hasBookmarked())
                     markEventAsAttending(event);
+                else
+                    deleteAttending(event);
                 break;
 
             case R.id.ib_share:
@@ -257,7 +259,7 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         String eventString = gson.toJson(event);
         Intent notificationIntent = new Intent(context, EventReminder.class);
         notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.parseInt(event.getId()), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Calendar now = Calendar.getInstance();
 
@@ -274,6 +276,48 @@ public class FragmentEvent extends Fragment implements View.OnClickListener{
         event.setHasBookmarked(true);
         updateView();
         //EventsManager.getAllEvents(context, null);
+    }
+
+    private void deleteAttending(final Event event) {
+        String url = Constants.URLs.DELETE_ATTENDING;
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.Keys.ACCOUNT_ID, user.getId());
+        params.put(Constants.Keys.EVENT_ID, event.getId());
+
+        CustomRequest request = new CustomRequest(url, params,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject object = response.getJSONObject(0);
+                            String output = object.getString(Constants.Keys.OUTPUT);
+                            if(output.equals("1")) {
+                                event.setHasBookmarked(false);
+                                Gson gson = new Gson();
+                                String eventString = gson.toJson(event);
+                                Intent notificationIntent = new Intent(context, EventReminder.class);
+                                notificationIntent.putExtra(Constants.EVENT_STRING, eventString);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.parseInt(event.getId()), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                alarmManager.cancel(pendingIntent);
+                                updateView();
+                            }
+                            else {
+                                Toast.makeText(context, object.getString(Constants.Keys.ERROR), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("JSONResponse", e.getLocalizedMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, Constants.Messages.NETWORK_ERROR, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        mRequestQueue.add(request);
     }
 
 }
