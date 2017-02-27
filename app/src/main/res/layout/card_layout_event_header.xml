@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="50sp"
                 android:textColor="#D82B42"
-                android:text="Incident"/>
+                android:includeFontPadding="true"
+                android:text=" Incident"/>
             <TextView
                 android:id="@+id/tv_17"
                 android:layout_width="wrap_content"
@@ -48,7 +49,7 @@
                 android:alpha="1"
                 android:layout_toRightOf="@+id/tv_incident"
                 android:paddingLeft="10dp"
-                android:text="'17" />
+                android:text="'17 " />
 
             <TextView
                 android:id="@+id/tv_theme"

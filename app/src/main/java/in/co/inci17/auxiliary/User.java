@@ -63,7 +63,12 @@ public class User {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 Constants.SHARED_PREFS_FILE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(USER_KEY, gson.toJson(user));
+
+        if(user == null)
+            editor.remove(USER_KEY);
+        else
+            editor.putString(USER_KEY, gson.toJson(user));
+
         editor.apply();
     }
 

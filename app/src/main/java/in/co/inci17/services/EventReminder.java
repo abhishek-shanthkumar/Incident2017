@@ -28,7 +28,7 @@ public class EventReminder extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(event.getTitle());
         builder.setContentText(startString);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_notification);
 
         Notification notification = new NotificationCompat.BigTextStyle(builder).bigText(startString+"\n"+event.getDescription()).build();
         notificationManager.notify(Integer.parseInt(event.getId()), notification);
