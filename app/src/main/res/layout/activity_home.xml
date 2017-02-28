@@ -127,6 +127,14 @@
                         android:background="@color/ColorAccent" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:text="Powered by NITK Alumni Association and HPCL"/>
+
                 <in.co.inci17.auxiliary.BottomFadeEdgeRV
                     android:id="@+id/rv_slamdunk"
                     android:layout_width="match_parent"

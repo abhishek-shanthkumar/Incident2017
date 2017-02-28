@@ -175,7 +175,9 @@ public class HomeActivity extends BaseActivity {
                 viewHolder.team_score_1.setText(match.getScoreA());
                 viewHolder.team_score_2.setText(match.getScoreB());
                 viewHolder.quarter.setText("QTR\n"+match.getQuarter());
-                if(match.getWinner().equals(Constants.WINNER_UNDECIDED))
+                if(!match.getStarted().equals(Constants.YES))
+                    viewHolder.match_review.setText(match.getWinner());
+                else if(match.getWinner().equals(Constants.WINNER_UNDECIDED))
                     viewHolder.match_review.setText(Constants.IN_PROGRESS);
                 else
                     viewHolder.match_review.setText("Winner: "+match.getWinner());
@@ -199,7 +201,10 @@ public class HomeActivity extends BaseActivity {
         ) {
             @Override
             protected void populateViewHolder(LiveEventsViewHolder viewHolder, Event event, int position) {
-                final Event thisEvent = allEvents.get(allEvents.indexOf(event));
+                int index = allEvents.indexOf(event);
+                if(index == -1)
+                    return;
+                final Event thisEvent = allEvents.get(index);
                 viewHolder.liveEventTitle.setText(thisEvent.getTitle());
                 Picasso.with(HomeActivity.this).load(thisEvent.getIconUrl()).into(viewHolder.icon);
                 viewHolder.eventID = event.getId();

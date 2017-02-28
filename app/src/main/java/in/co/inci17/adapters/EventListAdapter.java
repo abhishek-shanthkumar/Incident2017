@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.graphics.Palette;
@@ -323,6 +324,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         RecyclerView rvLiveEvents;
         TextView liveTitle;
+        ImageView nestAway;
         Context context;
         private FirebaseRecyclerAdapter mFirebaseRecyclerAdapter;
 
@@ -333,11 +335,20 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
             liveTitle = (TextView) v.findViewById(R.id.tv_live_title);
             liveTitle.setTypeface(null, Typeface.BOLD);
+            nestAway = (ImageView) v.findViewById(R.id.nestaway);
 
             rvLiveEvents = (RecyclerView)v.findViewById(R.id.rv_live_events);
             rvLiveEvents.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
             rvLiveEvents.setItemAnimator(new DefaultItemAnimator());
             rvLiveEvents.setAdapter(mFirebaseRecyclerAdapter);
+
+            nestAway.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(Constants.URLs.NESTAWAY));
+                    context.startActivity(intent);
+                }
+            });
 
         }
     }

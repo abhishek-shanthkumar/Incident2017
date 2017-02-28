@@ -10,6 +10,15 @@ public class SlamdunkMatch {
     private String scoreB;
     private String quarter;
     private String winner;
+    private String started;
+
+    public String getStarted() {
+        return started;
+    }
+
+    public void setStarted(String started) {
+        this.started = started;
+    }
 
     public String getTeamA() {
         return teamA;

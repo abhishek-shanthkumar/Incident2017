@@ -2,6 +2,7 @@ package in.co.inci17.services;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import com.google.gson.Gson;
 
 import in.co.inci17.R;
+import in.co.inci17.activities.SplashActivity;
 import in.co.inci17.auxiliary.Constants;
 import in.co.inci17.auxiliary.Event;
 
@@ -29,6 +31,10 @@ public class EventReminder extends BroadcastReceiver {
         builder.setContentTitle(event.getTitle());
         builder.setContentText(startString);
         builder.setSmallIcon(R.drawable.ic_notification);
+        Intent resultIntent = new Intent(context, SplashActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setAutoCancel(true);
+        builder.setContentIntent(pendingIntent);
 
         Notification notification = new NotificationCompat.BigTextStyle(builder).bigText(startString+"\n"+event.getDescription()).build();
         notificationManager.notify(Integer.parseInt(event.getId()), notification);

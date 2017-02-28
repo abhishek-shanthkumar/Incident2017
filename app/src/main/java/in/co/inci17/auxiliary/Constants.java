@@ -12,6 +12,7 @@ public class Constants {
     public static final String LIVE_EVENTS_CHILD = "live_events";
     public static final String SLAM_DUNK_CHILD = "slamdunk";
     public static final String WINNER_UNDECIDED = "undecided";
+    public static final String YES = "yes";
     public static final String IN_PROGRESS = "Match in progress";
     public static final String SHOW_ONLY_MY_EVENTS = "show_mine";
     public static final long BEFORE_MINUTES = 30;
@@ -32,7 +33,8 @@ public class Constants {
         public static final String DRIVE_FAQ_URL = "https://drive.google.com/file/d/0BzAWsYclHAMaeDZyQnpIejFhaE0/view";
         public static final String SPONSORS = "http://incident.co.in/sponsors.php";
         public static final String PLAY_STORE = "market://details?id=in.co.inci17";
-        public static final String PLACEHOLDER_IMAGE = "http://eadb.org/wp-content/uploads/2015/08/profile-placeholder.jpg";
+        public static final String NESTAWAY = "https://nestaway.com";
+        public static final String PLACEHOLDER_IMAGE = "http://incident.co.in/images/app-images/profile-placeholder.jpg";
 
         public static final String USER_PRESENT = HOST+"is-user-present.php";
         public static final String CREATE_USER_ACCOUNT = HOST+"create-user-account.php";
